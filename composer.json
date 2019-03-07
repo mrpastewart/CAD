@@ -1,0 +1,14 @@
+{
+    "name": "kirstywright/cad",
+    "description": "CAD",
+    "type": "project",
+    "authors": [
+        {
+            "name": "KirstyWright",
+            "email": "kirsty@evecmdr.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.0"
+    }
+}
