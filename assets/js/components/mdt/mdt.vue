@@ -5,11 +5,11 @@
           <button class="m-1 btn"><span class="badge badge-primary">2</span>&nbsp;CN20</button>
           <button type="button" class="ml-auto m-1 btn btn-danger"><i class="fas fa-bell"></i>&nbsp;Panic button&nbsp;</button>
         </div>
-        <div class="d-flex justify-content-center flex-wrap flex-fill">
+        <!-- <div class="d-flex justify-content-center flex-wrap flex-fill">
           <button type="button" class="m-1 btn btn-success">Available</button>
           <button type="button" class="m-1 btn btn-info">Ref break</button>
           <button type="button" class="m-1 btn btn-info">Game crash</button>
-        </div>
+        </div> -->
         <div>
           <h3 class='text-center'>RTC - Senora Freeway (W)</h3>
           <div class="d-flex justify-content-center flex-wrap">

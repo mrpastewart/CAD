@@ -17,8 +17,13 @@ $container = $app->getContainer();
 $container['view'] = new \Slim\Views\PhpRenderer('../views/');
 
 
-$app->get('/', function (Request $request, Response $response, array $args) {
+$app->get('/mdt', function (Request $request, Response $response, array $args) {
     $response = $this->view->render($response, 'mdt.php', []);
     return $response;
 });
+$app->get('/dispatcher', function (Request $request, Response $response, array $args) {
+    $response = $this->view->render($response, 'dispatcher.php', []);
+    return $response;
+});
+
 $app->run();

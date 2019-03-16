@@ -1,32 +1,145 @@
-html, body{
-  padding:0;
-  margin:0;
-  width:100%;
-  height:100%;
-  background-color:#4f5b6d;
-  color: #fff;
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #4f5b6d;
+    color: #fff;
 }
 
 div {
-  box-sizing:border-box;
+    box-sizing: border-box;
 }
 
 .mdt-panel {
-  background-color:#384359;
-  padding:10px;
-  border-radius:2px;
-  min-height:100px;
-  max-width:500px;
-  margin:3px auto;
+    background-color: #384359;
+    padding: 10px;
+    border-radius: 2px;
+    min-height: 100px;
+    max-width: 500px;
+    margin: 3px auto;
 }
 
 .mdt-container {
-  padding: 10px 5px 0 5px;
+    padding: 10px 5px 0 5px;
 }
 
 .square-menu__button {
-  margin:5px;
-  font-size:20px;
-  width:50px;
-  text-align:center;
+    margin: 5px;
+    font-size: 20px;
+    width: 50px;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+.dispatcher-panel__container {
+    margin-top: 5px;
+}
+
+.dispatcher-panel__title.dispatcher-panel__title--selected,
+.dispatcher-panel__title:hover {
+    opacity: 1;
+}
+
+.dispatcher-panel__title {
+    padding: 0px 5px 0px 5px;
+    background-color: #384359;
+    width: auto;
+    display: inline-block;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    opacity: 0.5;
+    cursor: pointer;
+    font-size: 80%
+}
+
+.dispatcher-panel__block {
+    background-color: #384359;
+    padding: 10px;
+    min-height: 100px;
+}
+
+.dispatcher-panel__block .dispatcher-panel__block--secondary {
+    background-color: #4f5b6d;
+}
+
+.dispatcher-container {
+    padding: 10px 5px 0 5px;
+}
+
+.unit-badge {
+    position: relative;
+    background-color: #4f5b6d;
+    height: 50px;
+    margin: 5px 0px;
+    border-radius: 5px;
+    padding: 5px;
+    min-width: 250px;
+}
+
+.unit-badge.unit-badge--auto-width {
+    width: 100%;
+}
+
+.unit-badge__primary-text {}
+
+.unit-badge__secondary-text {
+    color: #ccc;
+}
+
+.unit-badge__role-list {
+    position: absolute;
+    top: 5px;
+    right: 50px;
+}
+
+.unit-badge__arrow-right {
+    padding-left: 5px;
+}
+
+.unit-badge__arrow-left {
+    padding-right: 5px;
+}
+
+.unit-badge__arrow-right,
+.unit-badge__arrow-left {
+    top: calc(50% - 10px);
+    position: relative;
+    height: calc(100% - 10px);
+    font-size: 20px;
+    width: 30px;
+}
+
+.unit-badge__role-image {
+    float: left;
+    margin: 0px 2px;
+}
+
+.clear {
+    clear: both;
+}
+
+.state-code__box {
+    padding: 0 5px;
+    border-radius: 2px;
+    display: inline-block;
+    background-color: #5cb85c;
+}
+
+.chat-message__container {
+    padding: 5px 0;
+}
+
+.chat-message-author {
+    color: #007bff;
+}
+
+.chat-message__time {
+    font-size: 70%;
+    font-weight: 400;
+    color: #ccc;
 }
