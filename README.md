@@ -36,3 +36,71 @@ Computer aided dispatch system
 - Slim PHP
 - Mysqli
 - Vue.js
+
+
+```
+-- Create syntax for TABLE 'cad_incident_logs'
+CREATE TABLE `cad_incident_logs` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `incident_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `unit_id` int(11) DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT 1,
+  `added` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Create syntax for TABLE 'cad_incident_unit'
+CREATE TABLE `cad_incident_unit` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `incident_id` int(11) DEFAULT NULL,
+  `unit_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `added` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL,
+  `notes` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- Create syntax for TABLE 'cad_incidents'
+CREATE TABLE `cad_incidents` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(512) DEFAULT NULL,
+  `location1` varchar(512) DEFAULT NULL,
+  `location2` varchar(512) DEFAULT NULL,
+  `type` varchar(256) DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `grading` enum('D','S','I') DEFAULT NULL,
+  `status` int(11) unsigned DEFAULT 1,
+  `owner_id` int(11) unsigned DEFAULT NULL,
+  `interop` int(11) unsigned DEFAULT NULL,
+  `added` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- Create syntax for TABLE 'cad_unit_user'
+CREATE TABLE `cad_unit_user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `unit_id` int(11) DEFAULT NULL,
+  `added` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `unit_id` (`unit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Create syntax for TABLE 'cad_units'
+CREATE TABLE `cad_units` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `added` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+```
