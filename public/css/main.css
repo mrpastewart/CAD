@@ -107,7 +107,7 @@ h1, h2, h3, h4, h5, h6, p {
 
 .unit-badge__arrow-right,
 .unit-badge__arrow-left {
-    top: calc(50% - 10px);
+    top: calc(50% - 15px);
     position: relative;
     height: calc(100% - 10px);
     font-size: 20px;
