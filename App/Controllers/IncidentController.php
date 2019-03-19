@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use Psr\Container\ContainerInterface;
 use App\Models\Incident;
+use App\Models\Unit;
 
 Class IncidentController
 {
@@ -64,6 +65,9 @@ Class IncidentController
 
     public function index($request, $response, $args)
     {
+        // Even though this is the incident index
+        // it's serving as the default refreshable information hub
+    
         $incidents = Incident::where('shift_id', $args['shift_id'])
                                ->where(function ($query) {
                                    $query->where('status', '=', Incident::STATUS_DRAFT)
@@ -71,7 +75,12 @@ Class IncidentController
                                })
                                ->with(['units', 'logs'])
                                ->get();
-        return $response->withJson($incidents);
+
+        $units = Unit::where('shift_id', $args['shift_id'])->get();
+        return $response->withJson ([
+            'incidents' => $incidents,
+            'units' => $units
+        ]);
     }
 
     public function update($request, $response, $args)

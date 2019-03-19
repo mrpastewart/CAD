@@ -136,6 +136,31 @@ h1, h2, h3, h4, h5, h6, p {
     background-color: #dc3545;
 }
 
+.state-code__box.state-code__box--1,
+.state-code__box.state-code__box--2,
+.state-code__box.state-code__box--7,
+.state-code__box.state-code__box--3 {
+    background-color: #28a745;
+}
+
+.state-code__box.state-code__box--4,
+.state-code__box.state-code__box--6 {
+    background-color: #913f7a;
+}
+
+.state-code__box.state-code__box--5 {
+    background-color: #acc4d9;
+}
+
+.state-code__box.state-code__box--8,
+.state-code__box.state-code__box--9,
+.state-code__box.state-code__box--10,
+.state-code__box.state-code__box--11 {
+    background-color: #c7c7c7;
+}
+
+
+
 .chat-message__container {
     padding: 5px 0;
 }

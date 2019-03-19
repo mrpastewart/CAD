@@ -16,12 +16,12 @@
         </div>
         <div class="dispatcher-container" v-if="(incidents !== null)">
             <div class="container-fluid">
-                <!-- <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert">
+                <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert" v-if="stateZeroUnits">
                     <div class="text-center text-bold">
                         <i class="fas fa-bell state-zero-flash"></i>&nbsp;STATE ZERO&nbsp;<i class="fas fa-bell state-zero-flash"></i>
-                        <h5>CN20 - [123] J.Doe</h5>
+                        <h5 v-for="unit in stateZeroUnits">{{unit.name}} - {{unit.occupant_string}}</h5>
                     </div>
-                </div> -->
+                </div>
                 <div class="row">
                     <div v-if="!incident" class="dispatcher-panel__container col-lg-3 col-sm-6">
                         <div class="dispatcher-panel__title dispatcher-panel__title--selected">
@@ -43,24 +43,7 @@
                             RMU
                         </div>
                         <div class="dispatcher-panel__block">
-                            <div class="unit-badge d-inline-flex unit-badge--auto-width">
-                                <div>
-                                    <div class="unit-badge__primary-text"><span class='state-code__box'>2</span>&nbsp;CN20</div>
-                                    <div class="unit-badge__secondary-text">[910] P.Addison</div>
-                                </div>
-                                <div>
-                                    <div class="unit-badge__role-list">
-                                        <img class="unit-badge__role-image" src="img/role1/stndt.png" title='' alt="">
-                                        <img class="unit-badge__role-image" src="img/role2/rmu.png" title="" alt="">
-                                        <div class="clear"></div>
-                                    </div>
-                                </div>
-                                <div class="ml-auto">
-                                    <div class="unit-badge__arrow-right">
-                                        <i class="fas fa-angle-double-right"></i>
-                                    </div>
-                                </div>
-                            </div>
+                            <dispatcher-unit-badge v-bind:unit="unit" :bus="bus" v-for="unit in units"/>
                         </div>
                     </div>
                     <dispatcher-incident-units v-if="incident" v-bind:input-incident="incident" :bus="bus"/>
@@ -82,10 +65,12 @@ export default {
     data() {
         return {
             incidents: null,
+            units: null,
             bus: new vue(),
             incident: null,
             timer: null,
             lastUpdated: null,
+            stateZeroUnits: null
         }
     },
     mounted() {
@@ -106,7 +91,15 @@ export default {
             axios.get('/api/shifts/1/incidents')
             .then((response) => {
                 if (response.status == 200) {
-                    this.incidents = response.data
+                    this.incidents = response.data.incidents;
+                    this.units = response.data.units;
+
+                    let result = this.units.filter(unit => unit.status == 0);
+                    if (result.length == 0) {
+                        this.stateZeroUnits = null;
+                    } else {
+                        this.stateZeroUnits = result;
+                    }
                 }
                 let currentTime = new Date();
                 let hours = currentTime.getHours();
