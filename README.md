@@ -48,8 +48,8 @@ CREATE TABLE `cad_incident_logs` (
   `details` text DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT 1,
-  `added` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -59,15 +59,16 @@ CREATE TABLE `cad_incident_unit` (
   `incident_id` int(11) DEFAULT NULL,
   `unit_id` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
-  `added` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
   `notes` varchar(512) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Create syntax for TABLE 'cad_incidents'
 CREATE TABLE `cad_incidents` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `shift_id` int(11) DEFAULT NULL,
   `title` varchar(512) DEFAULT NULL,
   `location1` varchar(512) DEFAULT NULL,
   `location2` varchar(512) DEFAULT NULL,
@@ -77,19 +78,19 @@ CREATE TABLE `cad_incidents` (
   `status` int(11) unsigned DEFAULT 1,
   `owner_id` int(11) unsigned DEFAULT NULL,
   `interop` int(11) unsigned DEFAULT NULL,
-  `added` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- Create syntax for TABLE 'cad_unit_user'
 CREATE TABLE `cad_unit_user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `unit_id` int(11) DEFAULT NULL,
-  `added` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `unit_id` (`unit_id`)
@@ -98,9 +99,21 @@ CREATE TABLE `cad_unit_user` (
 -- Create syntax for TABLE 'cad_units'
 CREATE TABLE `cad_units` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `shift_id` int(11) DEFAULT NULL,
   `name` varchar(256) DEFAULT NULL,
-  `added` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- Create syntax for TABLE 'shifts'
+CREATE TABLE `shifts` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 ```
