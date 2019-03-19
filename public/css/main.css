@@ -46,7 +46,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .dispatcher-panel__title {
-    padding: 0px 5px 0px 5px;
+    padding: 0px 5px 1px 5px;
     background-color: #384359;
     width: auto;
     display: inline-block;
@@ -89,6 +89,8 @@ h1, h2, h3, h4, h5, h6, p {
 
 .unit-badge__secondary-text {
     color: #ccc;
+    font-size: 80%;
+    font-weight: 400;
 }
 
 .unit-badge__role-list {
@@ -130,6 +132,10 @@ h1, h2, h3, h4, h5, h6, p {
     background-color: #5cb85c;
 }
 
+.state-code__box.state-code__box--0 {
+    background-color: #dc3545;
+}
+
 .chat-message__container {
     padding: 5px 0;
 }
@@ -142,4 +148,96 @@ h1, h2, h3, h4, h5, h6, p {
     font-size: 70%;
     font-weight: 400;
     color: #ccc;
+}
+
+.state-zero-flash {
+    -webkit-animation: flash linear 0.6s infinite;
+    animation: flash linear 0.6s infinite;
+}
+
+@-webkit-keyframes flash {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.loading-panel__container {
+    display: flex;
+    justify-content: center;
+}
+
+.loading-panel__content {
+    margin-top: 50px;
+}
+
+.lds-dual-ring {
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.bordered-container {
+    border-radius: 10px;
+    width: 100%;
+    position: relative;
+    border: 2px solid #FFF;
+    margin-bottom:1rem;
+    margin-top:1rem;
+}
+
+.bordered-container__heading {
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    padding: 0 10px;
+    background: #384359;
+}
+
+.bordered-container__content{
+    padding: 20px 10px 10px 10px;
+    width:100%;
 }

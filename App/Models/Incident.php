@@ -15,7 +15,8 @@ class Incident extends Model
         'grading',
         'status',
         'interop',
-        'owner_id'
+        'owner_id',
+        'shift_id'
     ];
 
     const STATUS_DRAFT = 1;

@@ -5,6 +5,12 @@
           <button class="m-1 btn"><span class="badge badge-primary">2</span>&nbsp;CN20</button>
           <button type="button" class="ml-auto m-1 btn btn-danger"><i class="fas fa-bell"></i>&nbsp;Panic button&nbsp;</button>
         </div>
+        <!-- <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert">
+            <div class="text-center text-bold">
+                <i class="fas fa-bell state-zero-flash"></i>&nbsp;STATE ZERO&nbsp;<i class="fas fa-bell state-zero-flash"></i>
+                <h5>CN20 - [123] J.Doe</h5>
+            </div>
+        </div> -->
         <!-- <div class="d-flex justify-content-center flex-wrap flex-fill">
           <button type="button" class="m-1 btn btn-success">Available</button>
           <button type="button" class="m-1 btn btn-info">Ref break</button>

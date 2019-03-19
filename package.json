@@ -4,6 +4,7 @@
         "build": "webpack --config webpack.config.js"
     },
     "dependencies": {
+        "axios": "^0.18.0",
         "vue": "^2.6.9",
         "vue-loader": "^15.7.0",
         "vue-template-compiler": "^2.6.9",

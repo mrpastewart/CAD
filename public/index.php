@@ -44,6 +44,11 @@ $app->get('/dispatcher', function (Request $request, Response $response, array $
     return $response;
 });
 
-$app->get('/api/incidents/{id}', '\App\Controllers\IncidentController:view');
+$app->get('/', '\App\Controllers\IndexController:index');
+$app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
+$app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
+$app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
+$app->post('/api/incidents', '\App\Controllers\IncidentController:create');
+$app->delete('/api/incidents/{id}', '\App\Controllers\IncidentController:close');
 
 $app->run();
