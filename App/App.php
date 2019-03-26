@@ -13,7 +13,10 @@ Class App
      */
     private $app;
 
-    public function run()
+    /**
+     * Sets up then runs the App
+     */
+    public function run() : void
     {
         $this->setupSessions();
         $this->setupSlim();
@@ -21,7 +24,10 @@ Class App
         $this->app->run();
     }
 
-    private function setupSessions()
+    /**
+     * Sets up PHP session settings
+     */
+    private function setupSessions() : void
     {
         ini_set('session.cookie_httponly', 1);
         ini_set('session.cookie_secure', 0);
@@ -34,20 +40,21 @@ Class App
         session_cache_limiter(false);
         session_start();
 
-        // Make sure we have a canary set
         if (!isset($_SESSION['canary'])) {
             session_regenerate_id(true);
             $_SESSION['canary'] = time();
         }
 
-        // Regenerate session ID every five minutes:
         if ($_SESSION['canary'] < time() - 300) {
             session_regenerate_id(true);
             $_SESSION['canary'] = time();
         }
     }
 
-    private function setupSlim()
+    /**
+     * Starts slim with basic config vars
+     */
+    private function setupSlim() : void
     {
         $config = [
             // Slim Settings
@@ -82,7 +89,10 @@ Class App
         $this->app->getContainer()->get("db");
     }
 
-    public function setupRoutes()
+    /**
+     * Sets up the Slim routing
+     */
+    public function setupRoutes() : void
     {
         $self = $this; // To bypass being unable to pass $this into callback
 
@@ -105,7 +115,14 @@ Class App
         })->add([$this, 'checkAuth']);
     }
 
-    public function checkAuth($request, $response, $next)
+    /**
+     * Middleware - Checks users are authenticated for this page
+     * @param  Request    $request
+     * @param  Response   $response
+     * @param  callable   $next
+     * @return Response
+     */
+    public function checkAuth(Request $request, Response $response, callable $next) : Response
     {
         if (is_array($request->getHeader('Accept'))) {
             $json = in_array('application/json', $request->getHeader('Accept'));
