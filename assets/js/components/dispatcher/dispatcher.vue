@@ -89,41 +89,47 @@ export default {
     methods: {
         refresh: function() {
             axios.get('/api/shifts/1/incidents')
-            .then((response) => {
-                if (response.status == 200) {
-                    this.incidents = response.data.incidents;
-                    this.units = response.data.units;
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.incidents = response.data.incidents;
+                        this.units = response.data.units;
 
-                    let result = this.units.filter(unit => unit.status == 0);
-                    if (result.length == 0) {
-                        this.stateZeroUnits = null;
-                    } else {
-                        this.stateZeroUnits = result;
+                        let result = this.units.filter(unit => unit.status == 0);
+                        if (result.length == 0) {
+                            this.stateZeroUnits = null;
+                        } else {
+                            this.stateZeroUnits = result;
+                        }
                     }
-                }
-                let currentTime = new Date();
-                let hours = currentTime.getHours();
-                let minutes = currentTime.getMinutes();
-                let seconds = currentTime.getSeconds();
+                    let currentTime = new Date();
+                    let hours = currentTime.getHours();
+                    let minutes = currentTime.getMinutes();
+                    let seconds = currentTime.getSeconds();
 
-                if (minutes < 10) {
-                    minutes = "0" + minutes;
-                }
-                if (seconds < 10) {
-                    seconds = "0" + seconds;
-                }
-                this.lastUpdated = hours + ":" + minutes + ":" + seconds;
-            });
+                    if (minutes < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    if (seconds < 10) {
+                        seconds = "0" + seconds;
+                    }
+                    this.lastUpdated = hours + ":" + minutes + ":" + seconds;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        window.location.href = '/';
+                    }
+                });
         },
         cancelAutoUpdate: function() {
             clearInterval(this.timer)
         },
         createIncident: function() {
             this.incident = null;
-            axios.post('/api/incidents', {'shift_id': 1})
-            .then((response) => {
-                this.incident = response.data;
-            });
+            axios.post('/api/incidents', {
+                    'shift_id': 1
+                })
+                .then((response) => {
+                    this.incident = response.data;
+                });
         }
     },
     beforeDestroy() {

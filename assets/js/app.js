@@ -8,6 +8,7 @@ import DispatcherIncidentRow from './components/dispatcher/incident-row.vue'
 import DispatcherIncident from './components/dispatcher/incident.vue'
 import DispatcherIncidentUnits from './components/dispatcher/incident-units.vue'
 import DispatcherUnitBadge from './components/dispatcher/unit-badge.vue'
+import LoginForm from './components/login-form.vue'
 
 window.axios = require('axios');
 window.vue = require('vue'); // fix this at some point
@@ -20,6 +21,7 @@ Vue.component('dispatcher-incident-row', DispatcherIncidentRow);
 Vue.component('dispatcher-incident', DispatcherIncident);
 Vue.component('dispatcher-incident-units', DispatcherIncidentUnits);
 Vue.component('dispatcher-unit-badge', DispatcherUnitBadge);
+Vue.component('login-form', LoginForm);
 
 const app = new Vue({
     el: '#app'

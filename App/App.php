@@ -97,13 +97,23 @@ Class App
         $self = $this; // To bypass being unable to pass $this into callback
 
         $this->app->get('/', '\App\Controllers\IndexController:index');
+        $self->app->post('/auth/login', '\App\Controllers\UserController:login');
+        
         $this->app->group('', function () use ($self) {
+
+            // Shifts
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
+
+            // Incidents
             $self->app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
             $self->app->post('/api/incidents', '\App\Controllers\IncidentController:create');
             $self->app->delete('/api/incidents/{id}', '\App\Controllers\IncidentController:close');
 
+            // User
+
+
+            // Frontend
             $self->app->get('/mdt', function (Request $request, Response $response, array $args) {
                 $response = $this->view->render($response, 'mdt.php', []);
                 return $response;

@@ -20,6 +20,13 @@ class Unit extends Model
     const STATUS_TECHNICAL_ISSUES = 10;
     const STATUS_OFF_DUTY = 11;
 
+    protected $fillable = [
+        'name',
+        'status',
+        'shift_id',
+        'occupant_string'
+    ];
+
     /**
      * Gets active incident
      * @return Incident
@@ -35,5 +42,28 @@ class Unit extends Model
     public function incidents()
     {
         return $this->belongsToMany('\App\Models\Incident');
+    }
+
+    /**
+     * Gets list of users attached
+     */
+    public function users()
+    {
+        return $this->hasMany('\App\Models\User');
+    }
+
+    /**
+     * Gets new occupant_string attribute with list of users assigned
+     * @return string
+     */
+    public function getUpdatedOccupantString() : string
+    {
+        $users = $this->users()->get();
+
+        $string = '';
+        foreach ($users as $user) {
+            $string .= $user->name. ', ';
+        }
+        return trim($string, ', ');
     }
 }
