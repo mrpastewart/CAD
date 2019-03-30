@@ -2,6 +2,7 @@
 namespace App;
 
 use Slim\App as SlimApp;
+use App\Models\User;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -98,7 +99,7 @@ Class App
 
         $this->app->get('/', '\App\Controllers\IndexController:index');
         $self->app->post('/auth/login', '\App\Controllers\UserController:login');
-        
+
         $this->app->group('', function () use ($self) {
 
             // Shifts
@@ -140,8 +141,15 @@ Class App
             $json = stristr($request->getHeader('Accept'), 'application/json') !== NULL;
         }
         if (!isset($_SESSION['user_id'])) {
-            return $response->withStatus(401, 'unauthorised');
+            return $response->withStatus(401);
         }
+
+        $user = User::where('id', $_SESSION['user_id'])->first();
+
+        if ($user === NULL || $user->session_id !== $_SESSION['user_ref']) {
+            return $response->withStatus(401);
+        }
+
         $response = $next($request, $response);
         return $response;
     }
