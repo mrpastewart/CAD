@@ -109,6 +109,7 @@ Class App
 
             // Incidents
             $self->app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
+            $self->app->post('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:assignUnit');
             $self->app->post('/api/incidents', '\App\Controllers\IncidentController:create');
             $self->app->delete('/api/incidents/{id}', '\App\Controllers\IncidentController:close');
 
@@ -120,8 +121,8 @@ Class App
                 $response = $this->view->render($response, 'mdt.php', []);
                 return $response;
             });
-            $self->app->get('/dispatcher', function (Request $request, Response $response, array $args) {
-                $response = $this->view->render($response, 'dispatcher.php', []);
+            $self->app->get('/dispatcher/{id}', function (Request $request, Response $response, array $args) {
+                $response = $this->view->render($response, 'dispatcher.php', ['id' => $args['id']]);
                 return $response;
             });
         })->add([$this, 'checkAuth']);

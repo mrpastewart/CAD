@@ -6,14 +6,14 @@
         </div>
         <div>
             <div class="unit-badge__role-list">
-                <img class="unit-badge__role-image" src="img/role1/stndt.png" title='' alt="">
-                <img class="unit-badge__role-image" src="img/role2/rmu.png" title="" alt="">
+                <img class="unit-badge__role-image" src="/img/role1/stndt.png" title='' alt="">
+                <img class="unit-badge__role-image" src="/img/role2/rmu.png" title="" alt="">
                 <div class="clear"></div>
             </div>
         </div>
         <div class="ml-auto">
             <div class="unit-badge__arrow-right">
-                <i class="fas fa-angle-double-right"></i>
+                <i class="fas fa-angle-double-right" @click='action'></i>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-    props: ['unit', 'bus'],
+    props: ['unit', 'bus', 'type', 'incidentId'],
     data: function () {
         return {
         };
@@ -33,6 +33,17 @@ export default {
             }
             object['state-code__box--'+this.unit.status] = true;
             return object;
+        }
+    },
+    mounted: function() {
+
+    },
+    methods: {
+        action: function() {
+            if (this.type == 'incident-available') {
+                // assign unit to incident
+                axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id)
+            }
         }
     }
 }

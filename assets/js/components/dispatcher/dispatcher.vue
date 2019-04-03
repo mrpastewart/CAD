@@ -43,14 +43,27 @@
                             RMU
                         </div>
                         <div class="dispatcher-panel__block">
-                            <dispatcher-unit-badge v-bind:unit="unit" :bus="bus" v-for="unit in units"/>
+                            <div class="text-center text-bold" v-if="availableUnits.length == 0">
+                                <h5>No units</h5>
+                            </div>
+                            <dispatcher-unit-badge v-bind:unit="unit" :bus="bus" v-for="unit in availableUnits"/>
                         </div>
                     </div>
-                    <dispatcher-incident-units v-if="incident" v-bind:input-incident="incident" :bus="bus"/>
+                    <dispatcher-incident-units
+                    v-if="incident"
+                    v-bind:input-incident="incident"
+                    v-bind:available-units="availableUnits"
+                    v-bind:assigned-units="assignedUnits"
+                    :bus="bus"/>
                     <dispatcher-incident v-if="incident" v-bind:input-incident="incident" :bus="bus"/>
                     <div class="dispatcher-panel__container col-lg-9 col-sm-6" v-if="!incident">
                         <div class="dispatcher-panel__title dispatcher-panel__title--selected">
                             Incident list
+                        </div>
+                        <div class="dispatcher-panel__block dispatcher-panel__block--secondary" v-if="incidents.length == 0">
+                            <div class="text-center text-bold">
+                                <h5>No active incidents</h5>
+                            </div>
                         </div>
                         <dispatcher-incident-row :bus="bus" v-bind:incident="incident" v-for="incident in incidents" />
                     </div>
@@ -72,6 +85,19 @@ export default {
             timer: null,
             lastUpdated: null,
             stateZeroUnits: null
+        }
+    },
+    computed: {
+        availableUnits: function () {
+            return this.units.filter(function (unit) {
+                return [1, 2, 3, 4, 7].includes(unit.status);
+            })
+        },
+        assignedUnits: function () {
+            let incident = this.incident;
+            return this.units.filter(function (unit) {
+                return incident.id === unit.incident_id;
+            })
         }
     },
     mounted() {

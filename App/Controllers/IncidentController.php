@@ -61,13 +61,37 @@ Class IncidentController
 
     public function assignUnit($request, $response, $args)
     {
+        $incident = Incident::find($args['id']);
+        if (!$incident) {
+            return $response->withJson(['error' => 'Incident not found'], 404);
+        }
+
+        if ($incident->status !== Incident::STATUS_ACTIVE ) {
+            return $response->withJson(['error' => 'Incident is not active'], 400);
+        }
+
+        $unit = Unit::find($args['unit_id']);
+        if (!$unit) {
+            return $response->withJson(['error' => 'Unit not found'], 404);
+        }
+
+        $this->container->get('db')
+                        ->table('incident_unit')
+                        ->where('unit_id', $unit->id)
+                        ->where('status', Incident::UNIT_STATUS_ASSIGNED)
+                        ->update(['status' => Incident::UNIT_STATUS_UNASSIGNED]);
+        
+        $incident->units()->attach($unit->id, ['status' => Incident::UNIT_STATUS_ASSIGNED]);
+        $unit->status = Unit::STATUS_ON_ROUTE;
+        $unit->incident_id = $incident->id;
+        $unit->save();
     }
 
     public function index($request, $response, $args)
     {
         // Even though this is the incident index
         // it's serving as the default refreshable information hub
-    
+
         $incidents = Incident::where('shift_id', $args['shift_id'])
                                ->where(function ($query) {
                                    $query->where('status', '=', Incident::STATUS_DRAFT)
