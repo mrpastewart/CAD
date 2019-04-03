@@ -57,16 +57,18 @@ Class App
      */
     private function setupSlim() : void
     {
+        $dotenv = \Dotenv\Dotenv::create(__DIR__ . '/../');
+        $dotenv->load();
         $config = [
             // Slim Settings
             'determineRouteBeforeAppMiddleware' => false,
             'displayErrorDetails' => true,
             'db' => [
                 'driver' => 'mysql',
-                'host' => 'mariadb',
-                'database' => 'cad',
-                'username' => 'root',
-                'password' => 'root',
+                'host' => getenv('DB_HOST'),
+                'database' => getenv('DB_DATABASE'),
+                'username' => getenv('DB_USERNAME'),
+                'password' => getenv('DB_PASSWORD'),
                 'charset'   => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix'    => 'cad_',
@@ -99,11 +101,11 @@ Class App
 
         $this->app->get('/', '\App\Controllers\IndexController:index');
         $self->app->post('/auth/login', '\App\Controllers\UserController:login');
-
+        $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
+        
         $this->app->group('', function () use ($self) {
 
             // Shifts
-            $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 

@@ -90,7 +90,7 @@ export default {
     computed: {
         availableUnits: function () {
             return this.units.filter(function (unit) {
-                return [1, 2, 3, 4, 7].includes(unit.status);
+                return unit.incident_id === null;
             })
         },
         assignedUnits: function () {

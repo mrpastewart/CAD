@@ -40,7 +40,7 @@ Class UserController
         ]);
 
         // get shift
-        $shift = Shift::where('name', trim($params['shift']))
+        $shift = Shift::where('id', trim($params['shift']))
                         ->where('status', Shift::STATUS_ACTIVE)
                         ->first();
 
