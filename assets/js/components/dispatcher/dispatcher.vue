@@ -62,6 +62,7 @@
 
 <script>
 export default {
+    props: ['shiftId'],
     data() {
         return {
             incidents: null,
@@ -88,7 +89,7 @@ export default {
     },
     methods: {
         refresh: function() {
-            axios.get('/api/shifts/1/incidents')
+            axios.get('/api/shifts/'+this.shiftId+'/incidents')
                 .then((response) => {
                     if (response.status == 200) {
                         this.incidents = response.data.incidents;
@@ -125,7 +126,7 @@ export default {
         createIncident: function() {
             this.incident = null;
             axios.post('/api/incidents', {
-                    'shift_id': 1
+                    'shift_id': this.shiftId
                 })
                 .then((response) => {
                     this.incident = response.data;
