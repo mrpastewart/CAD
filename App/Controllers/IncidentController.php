@@ -80,10 +80,37 @@ Class IncidentController
                         ->where('unit_id', $unit->id)
                         ->where('status', Incident::UNIT_STATUS_ASSIGNED)
                         ->update(['status' => Incident::UNIT_STATUS_UNASSIGNED]);
-        
-        $incident->units()->attach($unit->id, ['status' => Incident::UNIT_STATUS_ASSIGNED]);
+
+        $incident->units()->attach($unit->id, ['status' => Incident::UNIT_STATUS_ASSIGNED, 'assigned_at' => date('Y-m-d H:i:s')]);
         $unit->status = Unit::STATUS_ON_ROUTE;
         $unit->incident_id = $incident->id;
+        $unit->save();
+    }
+
+    public function unassignUnit($request, $response, $args)
+    {
+        $incident = Incident::find($args['id']);
+        if (!$incident) {
+            return $response->withJson(['error' => 'Incident not found'], 404);
+        }
+
+        if ($incident->status !== Incident::STATUS_ACTIVE ) {
+            return $response->withJson(['error' => 'Incident is not active'], 400);
+        }
+
+        $unit = Unit::find($args['unit_id']);
+        if (!$unit) {
+            return $response->withJson(['error' => 'Unit not found'], 404);
+        }
+
+        $this->container->get('db')
+                        ->table('incident_unit')
+                        ->where('unit_id', $unit->id)
+                        ->where('status', Incident::UNIT_STATUS_ASSIGNED)
+                        ->update(['status' => Incident::UNIT_STATUS_UNASSIGNED, 'unassigned_at' => date('Y-m-d H:i:s')]);
+
+        $unit->status = Unit::STATUS_AVAILABLE_PATROL;
+        $unit->incident_id = null;
         $unit->save();
     }
 

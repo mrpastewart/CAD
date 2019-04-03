@@ -13,7 +13,7 @@
         </div>
         <div class="ml-auto">
             <div class="unit-badge__arrow-right">
-                <i class="fas fa-angle-double-right" @click='action'></i>
+                <i class="" v-bind:class="actionStyles" @click='action'></i>
             </div>
         </div>
     </div>
@@ -33,6 +33,17 @@ export default {
             }
             object['state-code__box--'+this.unit.status] = true;
             return object;
+        },
+        actionStyles: function() {
+            let object = {}
+            if (this.type == 'incident-available') {
+                object['fas fa-angle-double-right'] = true;
+            } else if (this.type == 'incident-assigned') {
+                object['fas fa-times'] = true;
+            } else {
+                object['fas fa-eye'] = true;
+            }
+            return object;
         }
     },
     mounted: function() {
@@ -42,7 +53,10 @@ export default {
         action: function() {
             if (this.type == 'incident-available') {
                 // assign unit to incident
-                axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id)
+                axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id);
+            } else if (this.type == 'incident-assigned') {
+                // unassign unit to incident
+                axios.delete('/api/incidents/'+this.incidentId+'/units/'+this.unit.id);
             }
         }
     }

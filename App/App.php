@@ -110,6 +110,7 @@ Class App
             // Incidents
             $self->app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
             $self->app->post('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:assignUnit');
+            $self->app->delete('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:unassignUnit');
             $self->app->post('/api/incidents', '\App\Controllers\IncidentController:create');
             $self->app->delete('/api/incidents/{id}', '\App\Controllers\IncidentController:close');
 
