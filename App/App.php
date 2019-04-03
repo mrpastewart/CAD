@@ -103,6 +103,7 @@ Class App
         $this->app->group('', function () use ($self) {
 
             // Shifts
+            $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 

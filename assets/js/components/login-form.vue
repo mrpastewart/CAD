@@ -16,7 +16,7 @@
                 <label>Shift</label>
                 <select type="text" class="form-control" v-model='shift'>
                     <option value="" selected disabled>Select a shift</option>
-                    <option>kirsty-demo</option>
+                    <option v-for="shift in shifts" v-bind:value="shift.id">{{shift.name}}</option>
                 </select>
             </div>
             <div class="form-check">
@@ -77,8 +77,14 @@ export default {
             division: "",
             callsign: "",
             passengerCallsign: "",
-            error: false
+            error: false,
+            shifts: []
         };
+    },
+    mounted() {
+        axios.get('/api/shifts').then((response) => {
+            this.shifts = response.data;
+        });
     },
     methods: {
         login(event) {
