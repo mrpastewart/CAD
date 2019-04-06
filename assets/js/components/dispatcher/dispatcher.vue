@@ -3,8 +3,10 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Dispatcher</a>
             <button class="btn btn-outline-info my-2 my-sm-0" @click="createIncident">&plus; Create CAD</button>
-            <div class="ml-auto navbar-brand">
-                <small v-if="lastUpdated">Last updated: {{lastUpdated}}</small>
+            <div class="clearfix ml-auto" v-if="loading">
+                <div class="spinner-border text-dark" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </nav>
         <div class="dispatcher-container" v-if="(incidents === null)">
@@ -51,11 +53,15 @@
                     </div>
                     <dispatcher-incident-units
                     v-if="incident"
-                    v-bind:input-incident="incident"
+                    v-bind:incident="incident"
                     v-bind:available-units="availableUnits"
                     v-bind:assigned-units="assignedUnits"
                     :bus="bus"/>
-                    <dispatcher-incident v-if="incident" v-bind:input-incident="incident" :bus="bus"/>
+                    <dispatcher-incident
+                    v-if="incident"
+                    v-bind:units="units"
+                    v-bind:incident.sync="incident"
+                    :bus="bus"/>
                     <div class="dispatcher-panel__container col-lg-9 col-sm-6" v-if="!incident">
                         <div class="dispatcher-panel__title dispatcher-panel__title--selected">
                             Incident list
@@ -84,7 +90,8 @@ export default {
             incident: null,
             timer: null,
             lastUpdated: null,
-            stateZeroUnits: null
+            stateZeroUnits: null,
+            loading: false
         }
     },
     computed: {
@@ -112,9 +119,15 @@ export default {
         this.bus.$on('closeIncident', (args) => {
             this.incident = null;
         });
+        this.bus.$on('refresh', (args) => {
+            clearInterval(this.timer);
+            this.timer = setInterval(this.refresh, 4000)
+            this.refresh();
+        });
     },
     methods: {
         refresh: function() {
+            this.loading = true;
             axios.get('/api/shifts/'+this.shiftId+'/incidents')
                 .then((response) => {
                     if (response.status == 200) {
@@ -127,6 +140,15 @@ export default {
                         } else {
                             this.stateZeroUnits = result;
                         }
+
+                        if (this.incident) {
+                            // Manually update the incident rendered as doesn't auto update
+                            let incidentIdToFind = this.incident.id;
+                            this.incident = this.incidents.find(function (incident) {
+                                return incident.id === incidentIdToFind;
+                            })
+                        }
+                        this.loading = false;
                     }
                     let currentTime = new Date();
                     let hours = currentTime.getHours();

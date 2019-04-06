@@ -35,19 +35,19 @@
                     <div v-if="editing">
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" class="form-control" v-model="incident.title" >
+                            <input type="text" class="form-control" v-model="editFields.title" >
                         </div>
                         <div class="form-group">
                             <label>Interop</label>
-                            <input type="number" class="form-control" v-model="incident.interop" >
+                            <input type="number" class="form-control" v-model="editFields.interop" >
                         </div>
                         <div class="form-group">
                             <label>Type</label>
-                            <input type="text" class="form-control" v-model="incident.type" >
+                            <input type="text" class="form-control" v-model="editFields.type" >
                         </div>
                         <div class="form-group">
                             <label>Grading</label>
-                            <select type="text" class="form-control" v-model="incident.grading" >
+                            <select type="text" class="form-control" v-model="editFields.grading" >
                                 <option value="I">India</option>
                                 <option value="S">Siera</option>
                                 <option value="D">Delayed</option>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-group">
                             <label>Details</label>
-                            <textarea class="form-control" v-model="incident.details" rows="3"></textarea>
+                            <textarea class="form-control" v-model="editFields.details" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -68,49 +68,18 @@
             <div class="dispatcher-panel__block dispatcher-panel__block--secondary">
                 <div class="dispatcher-panel__body">
                     <div class="">
-                        <div class='chat-message__container'>
-                            <div class="chat-message-author">
-                                <span class="badge badge-pill badge-primary">CN20</span>
-                                [123] J.Doe
-                            </div>
-                            <div class="chat-message__message">
-                                1x injured, requesting LAS.
-                            </div>
-                            <div class="chat-message__time">
-                                09/03/2019 13:00
-                            </div>
-                        </div>
-                        <div class='chat-message__container'>
-                            <div class="chat-message-author">
-                                <span class="badge badge-pill badge-primary">CN20</span>
-                            </div>
-                            <div class="chat-message__message">
-                                State 6: on scene
-                            </div>
-                            <div class="chat-message__time">
-                                09/03/2019 13:00
-                            </div>
-                        </div>
-                        <div class='chat-message__container'>
-                            <div class="chat-message-author">
+                        <div class='chat-message__container' v-for='log in logs'>
+                            <div class="chat-message-author" v-if='log.type == 1'>
                                 <span class="badge badge-pill badge-primary">System</span>
                             </div>
-                            <div class="chat-message__message">
-                                RMU124, RMU125 &amp; CN20 have been assigned.
-                            </div>
-                            <div class="chat-message__time">
-                                09/03/2019 12:30
-                            </div>
-                        </div>
-                        <div class='chat-message__container'>
-                            <div class="chat-message-author">
-                                <span class="badge badge-pill badge-primary">System</span>
+                            <div class="chat-message-author" v-if='log.type == 2'>
+                                <span class="badge badge-pill badge-primary">{{log.type}}</span>
                             </div>
                             <div class="chat-message__message">
-                                CAD created
+                                {{log.details}}
                             </div>
                             <div class="chat-message__time">
-                                09/03/2019 12:30
+                                {{log.created_at}}
                             </div>
                         </div>
                     </div>
@@ -122,13 +91,24 @@
 
 <script>
 export default {
-    props: ['inputIncident', 'bus'],
+    props: ['incident', 'bus', 'units'],
     data: function () {
+        let logs = [];
+
+        if (this.incident.logs) {
+            logs = this.incident.logs.reverse();
+        }
         return {
-            'incident': this.inputIncident,
-            'indiaGrade': (this.inputIncident.grading == 'I'),
-            editing: false
+            editFields: this.incident,
+            indiaGrade: (this.incident.grading == 'I'),
+            editing: false,
+            logs: logs
         };
+    },
+    watch: {
+        incident: function(newVal, oldVal) {
+            this.logs = newVal.logs.reverse();
+        }
     },
     methods: {
         close() {
@@ -136,16 +116,20 @@ export default {
         },
         edit() {
             this.editing = true;
+            this.editFields = this.incident;
         },
         save() {
             this.editing = false;
-            this.indiaGrade = (this.inputIncident.grading == 'I');
+            this.indiaGrade = (this.editFields.grading == 'I');
+            let self = this;
             axios.patch('/api/incidents/'+this.incident.id,{
-                "title": this.incident.title,
-                "interop": this.incident.interop,
-                "type": this.incident.type,
-                "grading": this.incident.grading,
-                "details": this.incident.details
+                "title": this.editFields.title,
+                "interop": this.editFields.interop,
+                "type": this.editFields.type,
+                "grading": this.editFields.grading,
+                "details": this.editFields.details
+            }).then(function() {
+                self.bus.$emit('refresh');
             });
         },
         deleteIncident() {

@@ -53,11 +53,9 @@
 
 <script>
 export default {
-    props: ['inputIncident', 'bus', 'availableUnits', 'assignedUnits', 'type'],
+    props: ['incident', 'bus', 'availableUnits', 'assignedUnits', 'type'],
     data: function() {
-        return {
-            'incident': this.inputIncident
-        };
+        return {};
     }
 }
 </script>

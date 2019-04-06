@@ -51,13 +51,20 @@ export default {
     },
     methods: {
         action: function() {
+            let self = this;
             if (this.type == 'incident-available') {
                 // assign unit to incident
-                axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id);
+                axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
+                    self.bus.$emit('refresh');
+                });
             } else if (this.type == 'incident-assigned') {
                 // unassign unit to incident
-                axios.delete('/api/incidents/'+this.incidentId+'/units/'+this.unit.id);
+                axios.delete('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
+                    self.bus.$emit('refresh');
+                });
             }
+
+
         }
     }
 }

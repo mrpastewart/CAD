@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use Psr\Container\ContainerInterface;
 use App\Models\Incident;
+use App\Models\IncidentLog;
 use App\Models\Unit;
 
 Class IncidentController
@@ -85,6 +86,8 @@ Class IncidentController
         $unit->status = Unit::STATUS_ON_ROUTE;
         $unit->incident_id = $incident->id;
         $unit->save();
+
+        IncidentLog::assignUnitToIncident($incident, $unit);
     }
 
     public function unassignUnit($request, $response, $args)
@@ -112,6 +115,8 @@ Class IncidentController
         $unit->status = Unit::STATUS_AVAILABLE_PATROL;
         $unit->incident_id = null;
         $unit->save();
+
+        IncidentLog::unassignUnitToIncident($incident, $unit);
     }
 
     public function index($request, $response, $args)
@@ -128,6 +133,7 @@ Class IncidentController
                                ->get();
 
         $units = Unit::where('shift_id', $args['shift_id'])->get();
+
         return $response->withJson ([
             'incidents' => $incidents,
             'units' => $units
