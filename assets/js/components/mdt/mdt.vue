@@ -25,34 +25,65 @@
                     <h5 v-for="unit in stateZeroUnits">{{unit.name}} - {{unit.occupant_string}}</h5>
                 </div>
             </div>
-            <!-- <div class="d-flex justify-content-center flex-wrap flex-fill">
-    <button type="button" class="m-1 btn btn-success">Available</button>
-    <button type="button" class="m-1 btn btn-info">Ref break</button>
-    <button type="button" class="m-1 btn btn-info">Game crash</button>
-    </div> -->
-            <div v-if="incident && unit.status !== 0">
-                <h3 class='text-center'>{{incident.title}}</h3>
-                <div class="d-flex justify-content-center flex-wrap">
-                    <div class='pr-2 pl-2'>CAD: {{incident.id}}</div>
-                    <div class='pr-2 pl-2'>Channel: {{incident.interop}}</div>
-                    <div class='pr-2 pl-2'>Response: <span class="badge badge-danger">{{incident.grading}} grade</span></div>
-                </div>
-                <div class='p-2 text-center'>
-                    <p style="white-space: pre-wrap;">{{incident.details}}</p>
+            <div v-if='page == "update-status"'>
+                <div class="d-flex justify-content-center flex-wrap flex-fill">
+                    <div class="btn btn-light m-2" @click='updateStatus(2)'>
+                        <span class='state-code__box state-code__box--2'>2</span>&nbsp;Available
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(4)'>
+                        <span class='state-code__box state-code__box--4'>4</span>&nbsp;Welfare break
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(5)' v-if="incident">
+                        <span class='state-code__box state-code__box--5'>5</span>&nbsp;On Route
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(6)' v-if="incident">
+                        <span class='state-code__box state-code__box--6'>6</span>&nbsp;On Scene
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(7)'>
+                        <span class='state-code__box state-code__box--7'>7</span>&nbsp;Available Committed
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(8)'>
+                        <span class='state-code__box state-code__box--8'>8</span>&nbsp;Unavailable
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(9)'>
+                        <span class='state-code__box state-code__box--9'>9</span>&nbsp;Transporting
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(10)'>
+                        <span class='state-code__box state-code__box--10'>10</span>&nbsp;Technical issues
+                    </div>
+                    <div class="btn btn-light m-2" @click='updateStatus(11)'>
+                        <span class='state-code__box state-code__box--11'>11</span>&nbsp;Off Duty
+                    </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center flex-wrap flex-fill">
-                <button type="button" class="m-1 btn btn-primary" v-if='unit.status === 5' @click='updateStatus(6)'>
-                    <i class="far fa-check-circle"></i>&nbsp;Mark On scene
-                </button>
-                <button type="button" class="m-1 btn btn-success" v-if='unit.status === 0' @click='cancelPanicButton()'>
-                    <i class="far fa-bell-slash"></i>&nbsp;Cancel panic button
-                </button>
+            <div v-if='page == "main"'>
+                <div v-if="incident && unit.status !== 0">
+                    <h3 class='text-center'>{{incident.title}}</h3>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <div class='pr-2 pl-2'>CAD: {{incident.id}}</div>
+                        <div class='pr-2 pl-2'>Channel: {{incident.interop}}</div>
+                        <div class='pr-2 pl-2'>Response: <span class="badge badge-danger">{{incident.grading}} grade</span></div>
+                    </div>
+                    <div class='p-2 text-center'>
+                        <p style="white-space: pre-wrap;">{{incident.details}}</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-wrap flex-fill">
+                    <button type="button" class="m-1 btn btn-primary" v-if='unit.status === 5' @click='updateStatus(6)'>
+                        <i class="far fa-check-circle"></i>&nbsp;Mark On scene
+                    </button>
+                    <button type="button" class="m-1 btn btn-success" v-if='unit.status === 0' @click='cancelPanicButton()'>
+                        <i class="far fa-bell-slash"></i>&nbsp;Cancel panic button
+                    </button>
+                </div>
             </div>
             <br>
-            <div class="d-flex justify-content-center flex-wrap">
-                <button class='square-menu__button btn btn-light' type='button'><i class="far fa-edit"></i></button>
-                <button class='square-menu__button btn btn-light' type='button'><i class="far fa-user"></i></button>
+            <div class="d-flex justify-content-center flex-wrap" v-if="page !== 'main'">
+                <button class='square-menu__button btn btn-light' type='button' @click="changePage('main')"><i class="fas fa-home"></i></button>
+            </div>
+            <div class="d-flex justify-content-center flex-wrap" v-if="page === 'main'">
+                <button class='square-menu__button btn btn-light' type='button' @click="changePage('update-status')"><i class="far fa-user"></i></button>
+                <button class='square-menu__button btn btn-light' type='button' v-if='incident'><i class="far fa-edit"></i></button>
                 <button class='square-menu__button btn btn-light' type='button'><i class="far fa-envelope"></i></button>
             </div>
         </div>
@@ -69,7 +100,8 @@ export default {
             units: null,
             incident: null,
             loading: false,
-            stateZeroUnits: null
+            stateZeroUnits: null,
+            page: 'main'
         }
     },
     mounted() {
@@ -107,6 +139,7 @@ export default {
             clearInterval(this.timer)
         },
         updateStatus: function (statusCode) {
+            this.page = 'main';
             let self = this;
             axios.patch('/api/units/'+this.unit.id, {
                 'status': statusCode
@@ -122,6 +155,9 @@ export default {
             } else {
                 this.updateStatus(2);
             }
+        },
+        changePage: function(page) {
+            this.page = page
         }
     },
     computed: {
