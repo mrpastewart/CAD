@@ -10,6 +10,10 @@ class User extends Model
         'name'
     ];
 
+    protected $hidden = [
+        'session_id'
+    ];
+
     public function unit()
     {
         return $this->belongsTo('App\Models\Unit');

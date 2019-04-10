@@ -102,10 +102,12 @@ Class App
         $this->app->get('/', '\App\Controllers\IndexController:index');
         $self->app->post('/auth/login', '\App\Controllers\UserController:login');
         $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
-        
+
         $this->app->group('', function () use ($self) {
 
             // Shifts
+            $self->app->get('/api/mdt', '\App\Controllers\MdtController:index');
+
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 
@@ -115,6 +117,9 @@ Class App
             $self->app->delete('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:unassignUnit');
             $self->app->post('/api/incidents', '\App\Controllers\IncidentController:create');
             $self->app->delete('/api/incidents/{id}', '\App\Controllers\IncidentController:close');
+
+            // Units
+            $self->app->patch('/api/units/{id}', '\App\Controllers\UnitController:update');
 
             // User
 

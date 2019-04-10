@@ -53,6 +53,14 @@ class Unit extends Model
     }
 
     /**
+     * Gets the shift that unit is attached to
+     */
+    public function shift()
+    {
+        return $this->belongsTo('\App\Models\Shift');
+    }
+
+    /**
      * Gets new occupant_string attribute with list of users assigned
      * @return string
      */
