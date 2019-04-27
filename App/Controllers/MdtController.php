@@ -27,7 +27,7 @@ Class MdtController
 
         $incident = null;
         if ($unit->incident_id !== null) {
-            $incident = Incident::find($unit->incident_id);
+            $incident = Incident::where('id', $unit->incident_id)->with('logs')->first();
         }
 
         $units = Unit::select(['name', 'status', 'occupant_string'])->get();

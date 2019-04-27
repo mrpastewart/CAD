@@ -56,6 +56,19 @@
                     </div>
                 </div>
             </div>
+            <div v-if='page == "incident"'>
+                <div v-if="incident">
+                    <h3 class='text-center'>{{incident.title}}</h3>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <div class='pr-2 pl-2'>CAD: {{incident.id}}</div>
+                        <div class='pr-2 pl-2'>Channel: {{incident.interop}}</div>
+                        <div class='pr-2 pl-2'>Response: <span class="badge badge-danger">{{incident.grading}} grade</span></div>
+                    </div>
+                    <div class='p-2 text-center'>
+                        <p style="white-space: pre-wrap;">{{incident.details}}</p>
+                    </div>
+                </div>
+            </div>
             <div v-if='page == "main"'>
                 <div v-if="incident && unit.status !== 0">
                     <h3 class='text-center'>{{incident.title}}</h3>
@@ -66,6 +79,31 @@
                     </div>
                     <div class='p-2 text-center'>
                         <p style="white-space: pre-wrap;">{{incident.details}}</p>
+                    </div>
+                    <div class="dispatcher-panel__container ">
+                        <div @click='toggleComments'>
+                            <i class="fas" v-bind:class="{ 'fa-chevron-down': show_comments, 'fa-chevron-right': !show_comments}"></i> Comments
+                        </div>
+                        <div class="dispatcher-panel__block dispatcher-panel__block--secondary" v-show='show_comments'>
+                            <div class="dispatcher-panel__body">
+                                <div class="">
+                                    <div class='chat-message__container' v-for='log in logs'>
+                                        <div class="chat-message-author" v-if='log.type == 1'>
+                                            <span class="badge badge-pill badge-primary">System</span>
+                                        </div>
+                                        <div class="chat-message-author" v-if='log.type == 2'>
+                                            <span class="badge badge-pill badge-primary">{{log.type}}</span>
+                                        </div>
+                                        <div class="chat-message__message">
+                                            {{log.details}}
+                                        </div>
+                                        <div class="chat-message__time">
+                                            {{log.created_at}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center flex-wrap flex-fill">
@@ -83,7 +121,7 @@
             </div>
             <div class="d-flex justify-content-center flex-wrap" v-if="page === 'main'">
                 <button class='square-menu__button btn btn-light' type='button' @click="changePage('update-status')"><i class="far fa-user"></i></button>
-                <button class='square-menu__button btn btn-light' type='button' v-if='incident'><i class="far fa-edit"></i></button>
+                <button class='square-menu__button btn btn-light' type='button' v-if='incident' @click="changePage('incident')"><i class="far fa-edit"></i></button>
                 <button class='square-menu__button btn btn-light' type='button'><i class="far fa-envelope"></i></button>
             </div>
         </div>
@@ -101,7 +139,8 @@ export default {
             incident: null,
             loading: false,
             stateZeroUnits: null,
-            page: 'main'
+            page: 'main',
+            show_comments: false
         }
     },
     mounted() {
@@ -145,6 +184,7 @@ export default {
                 'status': statusCode
             }).then(function() {
                 self.refresh();
+                self.changePage('main');
             });
         },
         cancelPanicButton: function () {
@@ -158,6 +198,9 @@ export default {
         },
         changePage: function(page) {
             this.page = page
+        },
+        toggleComments: function() {
+            this.show_comments = !this.show_comments
         }
     },
     computed: {
@@ -167,6 +210,13 @@ export default {
             }
             object['state-code__box--'+this.unit.status] = true;
             return object;
+        },
+        logs: function() {
+            let logs = []
+            if (this.incident.logs) {
+                logs = this.incident.logs.reverse();
+            }
+            return logs;
         }
     },
     beforeDestroy() {
