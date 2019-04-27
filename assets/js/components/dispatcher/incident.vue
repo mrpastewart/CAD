@@ -112,7 +112,7 @@ export default {
     },
     methods: {
         close() {
-            this.bus.$emit('closeIncident');
+            this.$store.dispatch('clearIncident');
         },
         edit() {
             this.editing = true;

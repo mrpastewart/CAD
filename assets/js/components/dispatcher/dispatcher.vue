@@ -18,7 +18,7 @@
         </div>
         <div class="dispatcher-container" v-if="(incidents !== null)">
             <div class="container-fluid">
-                <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert" v-if="stateZeroUnits">
+                <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert" v-if="stateZeroUnits.length > 0">
                     <div class="text-center text-bold">
                         <i class="fas fa-bell state-zero-flash"></i>&nbsp;STATE ZERO&nbsp;<i class="fas fa-bell state-zero-flash"></i>
                         <h5 v-for="unit in stateZeroUnits">{{unit.name}} - {{unit.occupant_string}}</h5>
@@ -80,18 +80,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+
 export default {
     props: ['shiftId'],
     data() {
         return {
-            incidents: null,
-            units: null,
             bus: new vue(),
-            incident: null,
             timer: null,
             lastUpdated: null,
-            stateZeroUnits: null,
-            loading: false
         }
     },
     computed: {
@@ -105,11 +103,23 @@ export default {
             return this.units.filter(function (unit) {
                 return incident.id === unit.incident_id;
             })
-        }
+        },
+        ...mapState({
+            incidents: state => state.incidents,
+            units: state => state.units,
+            incident: state => state.incident,
+            loading: state => state.loading,
+        }),
+        ...mapGetters([
+            'stateZeroUnits'
+        ]),
     },
     mounted() {
-        this.timer = setInterval(this.refresh, 4000)
-        this.refresh();
+        let self = this;
+        this.$store.dispatch('setShiftId', { id: this.shiftId}).then(() => {
+            self.refresh();
+            self.timer = setInterval(this.refresh, 4000)
+        })
 
         this.bus.$on('loadIncident', (args) => {
             if (args.id) {
@@ -127,46 +137,7 @@ export default {
     },
     methods: {
         refresh: function() {
-            this.loading = true;
-            axios.get('/api/shifts/'+this.shiftId+'/incidents')
-                .then((response) => {
-                    if (response.status == 200) {
-                        this.incidents = response.data.incidents;
-                        this.units = response.data.units;
-
-                        let result = this.units.filter(unit => unit.status == 0);
-                        if (result.length == 0) {
-                            this.stateZeroUnits = null;
-                        } else {
-                            this.stateZeroUnits = result;
-                        }
-
-                        if (this.incident) {
-                            // Manually update the incident rendered as doesn't auto update
-                            let incidentIdToFind = this.incident.id;
-                            this.incident = this.incidents.find(function (incident) {
-                                return incident.id === incidentIdToFind;
-                            })
-                        }
-                        this.loading = false;
-                    }
-                    let currentTime = new Date();
-                    let hours = currentTime.getHours();
-                    let minutes = currentTime.getMinutes();
-                    let seconds = currentTime.getSeconds();
-
-                    if (minutes < 10) {
-                        minutes = "0" + minutes;
-                    }
-                    if (seconds < 10) {
-                        seconds = "0" + seconds;
-                    }
-                    this.lastUpdated = hours + ":" + minutes + ":" + seconds;
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        window.location.href = '/';
-                    }
-                });
+            this.$store.dispatch('updateDispatcher');
         },
         cancelAutoUpdate: function() {
             clearInterval(this.timer)

@@ -35,10 +35,7 @@ export default {
     },
     methods: {
         open() {
-            this.bus.$emit('loadIncident', {
-                id: this.incident.id,
-                incident: this.incident // potential issues with looping here
-            });
+            this.$store.dispatch('setIncident', { id: this.incident.id});
         }
     }
 }
