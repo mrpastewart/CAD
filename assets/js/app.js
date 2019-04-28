@@ -66,8 +66,9 @@ const store = new Vuex.Store({
             context.commit('SET_INCIDENT', null);
         },
         updateDispatcher(context) {
-            context.commit('SET_LOADING', true);
-            axios.get('/api/shifts/'+context.state.shiftId+'/incidents')
+            return new Promise((resolve, reject) => {
+                context.commit('SET_LOADING', true);
+                axios.get('/api/shifts/'+context.state.shiftId+'/incidents')
                 .then((response) => {
                     if (response.status == 200) {
                         context.commit('SET_INCIDENTS', response.data.incidents);
@@ -78,13 +79,16 @@ const store = new Vuex.Store({
                             context.dispatch('setIncident',{id:context.state.incident.id});
                         }
                         context.commit('SET_LOADING', false);
+                        resolve(response);
                     }
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         context.commit('SET_LOADING', false);
                         window.location.href = '/';
                     }
+                    reject(error);
                 });
+            });
         }
     },
     getters: {

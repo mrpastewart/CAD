@@ -137,18 +137,19 @@ export default {
     },
     methods: {
         refresh: function() {
-            this.$store.dispatch('updateDispatcher');
+            return this.$store.dispatch('updateDispatcher');
         },
         cancelAutoUpdate: function() {
             clearInterval(this.timer)
         },
         createIncident: function() {
-            this.incident = null;
             axios.post('/api/incidents', {
                     'shift_id': this.shiftId
                 })
                 .then((response) => {
-                    this.incident = response.data;
+                    this.refresh().then(() => {
+                        this.$store.dispatch('setIncident', {'id': response.data.id});
+                    });
                 });
         }
     },
