@@ -33,7 +33,7 @@ class Unit extends Model
      */
     public function incident()
     {
-        return $this->incidents()->where('status', Incident::STATUS_ACTIVE)->get();
+        return $this->belongsTo('\App\Models\Incident');
     }
 
     /**

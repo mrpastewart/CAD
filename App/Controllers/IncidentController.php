@@ -116,7 +116,7 @@ Class IncidentController
         $unit->incident_id = null;
         $unit->save();
 
-        IncidentLog::unassignUnitToIncident($incident, $unit);
+        IncidentLog::unassignUnitFromIncident($incident, $unit);
     }
 
     public function index($request, $response, $args)

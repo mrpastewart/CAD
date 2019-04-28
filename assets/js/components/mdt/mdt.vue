@@ -107,6 +107,9 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center flex-wrap flex-fill">
+                    <p class='m-1 text-center' v-if='incident === null'>
+                        No current assignment
+                    </p>
                     <button type="button" class="m-1 btn btn-primary" v-if='unit.status === 5' @click='updateStatus(6)'>
                         <i class="far fa-check-circle"></i>&nbsp;Mark On scene
                     </button>
