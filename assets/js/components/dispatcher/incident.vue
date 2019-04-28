@@ -28,6 +28,7 @@
                         <h4>{{incident.title}}&nbsp;<span class="badge" v-bind:class='{ "badge-danger": (indiaGrade), "badge-success": (!indiaGrade) }'>{{incident.grading}} Grade</span></h4>
                         <p>ID: {{incident.id}}</p>
                         <p>Interop channel: {{incident.interop}}</p>
+                        <p>Location:{{incident.location1}}&nbsp;,{{incident.location2}}</p>
                         <p>Type:{{incident.type}}</p>
                         <br />
                         <p style="white-space: pre-wrap;">{{incident.details}}</p>
@@ -44,6 +45,14 @@
                         <div class="form-group">
                             <label>Type</label>
                             <input type="text" class="form-control" v-model="editFields.type" >
+                        </div>
+                        <div class="form-group">
+                            <label>Location 1</label>
+                            <input type="text" class="form-control" v-model="editFields.location1" >
+                        </div>
+                        <div class="form-group">
+                            <label>Location 2</label>
+                            <input type="text" class="form-control" v-model="editFields.location2" >
                         </div>
                         <div class="form-group">
                             <label>Grading</label>
@@ -127,7 +136,9 @@ export default {
                 "interop": this.editFields.interop,
                 "type": this.editFields.type,
                 "grading": this.editFields.grading,
-                "details": this.editFields.details
+                "details": this.editFields.details,
+                "location1": this.editFields.location1,
+                "location2": this.editFields.location2
             }).then(function() {
                 self.bus.$emit('refresh');
             });

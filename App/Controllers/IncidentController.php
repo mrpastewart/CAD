@@ -156,12 +156,13 @@ Class IncidentController
         // TODO: Only edit if shift not over
 
         $params = $request->getParsedBody();
-        $incident->title = $params['title'];
-        $incident->interop = $params['interop'];
-        $incident->type = $params['type'];
-        $incident->grading = $params['grading'];
-        $incident->details = $params['details'];
-        $incident->save();
+        try {
+            $incident->fill($params);
+
+            $incident->save();
+        } catch (\Illuminate\Database\Eloquent\MassAssignmentException $e) {
+            return $response->withJson(['error' => 'Invalid attributes sent'], 400);
+        }
 
         return $response;
     }
