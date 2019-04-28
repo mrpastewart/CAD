@@ -74,4 +74,9 @@ class Unit extends Model
         }
         return trim($string, ', ');
     }
+
+    public function division()
+    {
+        return $this->belongsTo('\App\Models\Division');
+    }
 }

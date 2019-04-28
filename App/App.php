@@ -123,6 +123,8 @@ Class App
 
             // User
 
+            // Divisions
+            $self->app->get('/api/divisions', '\App\Controllers\DivisionController:index');
 
             // Frontend
             $self->app->get('/mdt', function (Request $request, Response $response, array $args) {

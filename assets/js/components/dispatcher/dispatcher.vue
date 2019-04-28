@@ -26,29 +26,27 @@
                 </div>
                 <div class="row">
                     <div v-if="!incident" class="dispatcher-panel__container col-lg-3 col-sm-6">
-                        <div class="dispatcher-panel__title dispatcher-panel__title--selected">
+                        <div class="dispatcher-panel__title"
+                        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == null) }"
+                        v-on:click="setDivisionFilter(null)">
                             All
                         </div>
-                        <div class="dispatcher-panel__title">
-                            TP
-                        </div>
-                        <div class="dispatcher-panel__title">
-                            CS
-                        </div>
-                        <div class="dispatcher-panel__title">
-                            Traffic
-                        </div>
-                        <div class="dispatcher-panel__title">
-                            Firearms
-                        </div>
-                        <div class="dispatcher-panel__title">
-                            RMU
+                        <div class="dispatcher-panel__title"
+                        v-for="division in divisions"
+                        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == division.id) }"
+                        v-on:click="setDivisionFilter(division.id)">
+                            {{division.shorthand_name}}
                         </div>
                         <div class="dispatcher-panel__block">
                             <div class="text-center text-bold" v-if="availableUnits.length == 0">
                                 <h5>No units</h5>
                             </div>
-                            <dispatcher-unit-badge v-bind:unit="unit" :bus="bus" v-for="unit in availableUnits"/>
+                            <dispatcher-unit-badge
+                                v-bind:unit="unit"
+                                :bus="bus"
+                                v-if="(unit.division_id == divisionFilter || divisionFilter == null)"
+                                v-for="unit in availableUnits"
+                            />
                         </div>
                     </div>
                     <dispatcher-incident-units
@@ -80,8 +78,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { mapGetters } from 'vuex'
+import {
+    mapState
+} from 'vuex'
+import {
+    mapGetters
+} from 'vuex'
 
 export default {
     props: ['shiftId'],
@@ -90,17 +92,18 @@ export default {
             bus: new vue(),
             timer: null,
             lastUpdated: null,
+            divisionFilter: null
         }
     },
     computed: {
-        availableUnits: function () {
-            return this.units.filter(function (unit) {
+        availableUnits: function() {
+            return this.units.filter(function(unit) {
                 return unit.incident_id === null;
             })
         },
-        assignedUnits: function () {
+        assignedUnits: function() {
             let incident = this.incident;
-            return this.units.filter(function (unit) {
+            return this.units.filter(function(unit) {
                 return incident.id === unit.incident_id;
             })
         },
@@ -109,14 +112,18 @@ export default {
             units: state => state.units,
             incident: state => state.incident,
             loading: state => state.loading,
+            divisions: state => state.divisions,
         }),
         ...mapGetters([
             'stateZeroUnits'
         ]),
     },
     mounted() {
+        this.$store.dispatch('getDivisions');
         let self = this;
-        this.$store.dispatch('setShiftId', { id: this.shiftId}).then(() => {
+        this.$store.dispatch('setShiftId', {
+            id: this.shiftId
+        }).then(() => {
             self.refresh();
             self.timer = setInterval(this.refresh, 4000)
         })
@@ -148,9 +155,18 @@ export default {
                 })
                 .then((response) => {
                     this.refresh().then(() => {
-                        this.$store.dispatch('setIncident', {'id': response.data.id});
+                        this.$store.dispatch('setIncident', {
+                            'id': response.data.id
+                        });
                     });
                 });
+        },
+        setDivisionFilter: function(id) {
+            if (id) {
+                this.divisionFilter = id;
+            } else {
+                this.divisionFilter = null;
+            }
         }
     },
     beforeDestroy() {

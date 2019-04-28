@@ -34,7 +34,8 @@ const store = new Vuex.Store({
         incident: null,
         timer: null,
         loading: false,
-        shiftId: false
+        shiftId: false,
+        divisions: []
     },
     mutations: {
         SET_LOADING(state, status) {
@@ -51,6 +52,9 @@ const store = new Vuex.Store({
         },
         SET_SHIFT_ID(state, shiftId) {
             state.shiftId = shiftId;
+        },
+        SET_DIVISIONS(state, divisions) {
+            state.divisions = divisions;
         }
     },
     actions: {
@@ -64,6 +68,22 @@ const store = new Vuex.Store({
         },
         clearIncident(context) {
             context.commit('SET_INCIDENT', null);
+        },
+        getDivisions(context) {
+            return new Promise((resolve, reject) => {
+                axios.get('/api/divisions')
+                .then((response) => {
+                    if (response.status == 200) {
+                        context.commit('SET_DIVISIONS', response.data)
+                        resolve(response);
+                    };
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        window.location.href = '/';
+                    }
+                    reject(error);
+                });
+            });
         },
         updateDispatcher(context) {
             return new Promise((resolve, reject) => {

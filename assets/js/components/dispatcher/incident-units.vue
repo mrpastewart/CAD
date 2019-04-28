@@ -1,31 +1,24 @@
 <template lang="html">
     <div class="dispatcher-panel__container col-lg-6">
-        <div class="dispatcher-panel__title dispatcher-panel__title--selected">
+        <div class="dispatcher-panel__title"
+        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == null) }"
+        v-on:click="setDivisionFilter(null)">
             All
         </div>
-        <div class="dispatcher-panel__title">
-            TP
-        </div>
-        <div class="dispatcher-panel__title">
-            CS
-        </div>
-        <div class="dispatcher-panel__title">
-            Traffic
-        </div>
-        <div class="dispatcher-panel__title">
-            Firearms
-        </div>
-        <div class="dispatcher-panel__title">
-            RMU
+        <div class="dispatcher-panel__title"
+        v-for="division in divisions"
+        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == division.id) }"
+        v-on:click="setDivisionFilter(division.id)">
+            {{division.shorthand_name}}
         </div>
         <div class="dispatcher-panel__block d-flex">
             <div style='padding:0px 5px;width:50%'>
                 <h5>Available:</h5>
-                <dispatcher-unit-badge v-bind:incident-id='incident.id' type='incident-available' v-bind:unit="unit" :bus="bus" v-for="unit in availableUnits"/>
+                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-available' v-bind:unit="unit" :bus="bus" v-for="unit in availableUnits"/>
             </div>
             <div style='width:50%;'>
                 <h5>Assigned to CAD:</h5>
-                <dispatcher-unit-badge v-bind:incident-id='incident.id' type='incident-assigned' v-bind:unit="unit" :bus="bus" v-for="unit in assignedUnits"/>
+                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-assigned' v-bind:unit="unit" :bus="bus" v-for="unit in assignedUnits"/>
                 <!--
                 <div class="unit-badge d-inline-flex unit-badge--auto-width">
                     <div>
@@ -52,10 +45,28 @@
 
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     props: ['incident', 'bus', 'availableUnits', 'assignedUnits', 'type'],
     data: function() {
-        return {};
+        return {
+            divisionFilter: null
+        };
+    },
+    computed: {
+        ...mapState({
+            divisions: state => state.divisions,
+        })
+    },
+    methods: {
+        setDivisionFilter: function(id) {
+            if (id) {
+                this.divisionFilter = id;
+            } else {
+                this.divisionFilter = null;
+            }
+        }
     }
 }
 </script>
