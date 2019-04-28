@@ -14,11 +14,11 @@
         <div class="dispatcher-panel__block d-flex">
             <div style='padding:0px 5px;width:50%'>
                 <h5>Available:</h5>
-                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-available' v-bind:unit="unit" :bus="bus" v-for="unit in availableUnits"/>
+                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-available' v-bind:unit="unit" v-for="unit in availableUnits"/>
             </div>
             <div style='width:50%;'>
                 <h5>Assigned to CAD:</h5>
-                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-assigned' v-bind:unit="unit" :bus="bus" v-for="unit in assignedUnits"/>
+                <dispatcher-unit-badge v-if="(unit.division_id == divisionFilter || divisionFilter == null)" v-bind:incident-id='incident.id' type='incident-assigned' v-bind:unit="unit" v-for="unit in assignedUnits"/>
                 <!--
                 <div class="unit-badge d-inline-flex unit-badge--auto-width">
                     <div>
@@ -48,7 +48,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    props: ['incident', 'bus', 'availableUnits', 'assignedUnits', 'type'],
+    props: ['incident', 'availableUnits', 'assignedUnits', 'type'],
     data: function() {
         return {
             divisionFilter: null

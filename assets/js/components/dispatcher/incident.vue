@@ -100,7 +100,7 @@
 
 <script>
 export default {
-    props: ['incident', 'bus', 'units'],
+    props: ['incident', 'units'],
     data: function () {
         let logs = [];
 
@@ -140,7 +140,7 @@ export default {
                 "location1": this.editFields.location1,
                 "location2": this.editFields.location2
             }).then(function() {
-                self.bus.$emit('refresh');
+                this.$store.dispatch('refresh');
             });
         },
         deleteIncident() {

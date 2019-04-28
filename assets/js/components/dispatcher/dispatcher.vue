@@ -43,7 +43,6 @@
                             </div>
                             <dispatcher-unit-badge
                                 v-bind:unit="unit"
-                                :bus="bus"
                                 v-if="(unit.division_id == divisionFilter || divisionFilter == null)"
                                 v-for="unit in availableUnits"
                             />
@@ -53,13 +52,11 @@
                     v-if="incident"
                     v-bind:incident="incident"
                     v-bind:available-units="availableUnits"
-                    v-bind:assigned-units="assignedUnits"
-                    :bus="bus"/>
+                    v-bind:assigned-units="assignedUnits"/>
                     <dispatcher-incident
                     v-if="incident"
                     v-bind:units="units"
-                    v-bind:incident.sync="incident"
-                    :bus="bus"/>
+                    v-bind:incident.sync="incident"/>
                     <div class="dispatcher-panel__container col-lg-9 col-sm-6" v-if="!incident">
                         <div class="dispatcher-panel__title dispatcher-panel__title--selected">
                             Incident list
@@ -69,7 +66,7 @@
                                 <h5>No active incidents</h5>
                             </div>
                         </div>
-                        <dispatcher-incident-row :bus="bus" v-bind:incident="incident" v-for="incident in incidents" />
+                        <dispatcher-incident-row v-bind:incident="incident" v-for="incident in incidents" />
                     </div>
                 </div>
             </div>
@@ -89,7 +86,6 @@ export default {
     props: ['shiftId'],
     data() {
         return {
-            bus: new vue(),
             timer: null,
             lastUpdated: null,
             divisionFilter: null
@@ -127,20 +123,6 @@ export default {
             self.refresh();
             self.timer = setInterval(this.refresh, 4000)
         })
-
-        this.bus.$on('loadIncident', (args) => {
-            if (args.id) {
-                this.incident = args.incident;
-            }
-        });
-        this.bus.$on('closeIncident', (args) => {
-            this.incident = null;
-        });
-        this.bus.$on('refresh', (args) => {
-            clearInterval(this.timer);
-            this.timer = setInterval(this.refresh, 4000)
-            this.refresh();
-        });
     },
     methods: {
         refresh: function() {

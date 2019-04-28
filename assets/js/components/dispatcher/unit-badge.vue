@@ -21,7 +21,7 @@
 
 <script>
 export default {
-    props: ['unit', 'bus', 'type', 'incidentId'],
+    props: ['unit', 'type', 'incidentId'],
     data: function () {
         return {
         };
@@ -55,12 +55,12 @@ export default {
             if (this.type == 'incident-available') {
                 // assign unit to incident
                 axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
-                    self.bus.$emit('refresh');
+                    this.$store.dispatch('refresh');
                 });
             } else if (this.type == 'incident-assigned') {
                 // unassign unit to incident
                 axios.delete('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
-                    self.bus.$emit('refresh');
+                    this.$store.dispatch('refresh');
                 });
             }
 

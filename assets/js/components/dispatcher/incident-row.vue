@@ -23,7 +23,7 @@
 
 <script>
 export default {
-    props: ['incident', 'bus'],
+    props: ['incident'],
     data() {
         return {
             'indiaGrade': (this.incident.grading == 'I'),
