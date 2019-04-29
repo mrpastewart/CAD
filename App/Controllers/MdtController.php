@@ -22,7 +22,7 @@ Class MdtController
 
     public function index($request, $response, $args)
     {
-        $user = User::find($_SESSION['user_id']);
+        $user = User::where('session_id', $_SESSION['user_ref'])->first();
         $unit = Unit::find($user->unit_id);
 
         $incident = null;

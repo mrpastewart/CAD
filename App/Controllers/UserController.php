@@ -71,13 +71,12 @@ Class UserController
 
             $user->unit_id = $unit->id;
         }
-
         $sessionId = bin2hex(random_bytes(16));
         $_SESSION['user_ref'] = $sessionId;
         $_SESSION['user_id'] = $user->id;
         $user->session_id = $sessionId;
         $user->save();
-        
+
         // Update unit
         $unit->occupant_string = $unit->getUpdatedOccupantString();
         $unit->save();

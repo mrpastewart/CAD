@@ -31,7 +31,7 @@ Class App
     private function setupSessions() : void
     {
         ini_set('session.cookie_httponly', 1);
-        ini_set('session.cookie_secure', 0);
+        // ini_set('session.cookie_secure', 0);
         ini_set('session.use_cookies', 1);
         ini_set('session.use_only_cookies', 1);
         ini_set('session.hash_function', 'sha256');
@@ -40,7 +40,6 @@ Class App
         session_name('cad_session');
         session_cache_limiter(false);
         session_start();
-
         if (!isset($_SESSION['canary'])) {
             session_regenerate_id(true);
             $_SESSION['canary'] = time();
@@ -152,11 +151,12 @@ Class App
         } else {
             $json = stristr($request->getHeader('Accept'), 'application/json') !== NULL;
         }
-        if (!isset($_SESSION['user_id'])) {
+
+        if (!isset($_SESSION['user_ref'])) {
             return $response->withStatus(401);
         }
 
-        $user = User::where('id', $_SESSION['user_id'])->first();
+        $user = User::where('session_id', $_SESSION['user_ref'])->first();
 
         if ($user === NULL || $user->session_id !== $_SESSION['user_ref']) {
             return $response->withStatus(401);
