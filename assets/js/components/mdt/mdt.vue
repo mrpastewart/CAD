@@ -67,6 +67,25 @@
                     <div class='p-2 text-center'>
                         <p style="white-space: pre-wrap;">{{incident.details}}</p>
                     </div>
+                    <div class="p-2">
+                        <div class="form-group">
+                            <label></label>
+                            <select type="text" class="form-control" v-model="editFields.grading" >
+                                <option value="I">India</option>
+                                <option value="S">Siera</option>
+                                <option value="D">Delayed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea class="form-control" v-model="updateText" rows="3"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="m-1 btn btn-success" @click='submitUpdate'>
+                                Submit update
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div v-if='page == "main"'>
@@ -143,7 +162,8 @@ export default {
             loading: false,
             stateZeroUnits: null,
             page: 'main',
-            show_comments: false
+            show_comments: false,
+            updateText: ''
         }
     },
     mounted() {
@@ -204,6 +224,9 @@ export default {
         },
         toggleComments: function() {
             this.show_comments = !this.show_comments
+        },
+        submitUpdate: function () {
+
         }
     },
     computed: {
