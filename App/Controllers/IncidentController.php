@@ -5,6 +5,7 @@ use Psr\Container\ContainerInterface;
 use App\Models\Incident;
 use App\Models\IncidentLog;
 use App\Models\Unit;
+use App\Models\User;
 
 Class IncidentController
 {
@@ -140,6 +141,38 @@ Class IncidentController
         ]);
     }
 
+    public function addNote($request, $response, $args)
+    {
+        $incident = Incident::find($args['id']);
+        if (!$incident) {
+            return $response->withStatus(404);
+        }
+
+        if ($incident->status !== Incident::STATUS_ACTIVE) {
+            return $response->withStatus(403);
+        }
+
+        $user = User::where('session_id', $_SESSION['user_ref'])->first();
+        if ($user === NULL || $user->session_id !== $_SESSION['user_ref']) {
+            return $response->withStatus(401);
+        }
+
+        $params = $request->getParsedBody();
+
+        if (!isset($params['content'])) {
+            return $response->withStatus(400);
+        }
+
+        $incidentLog = IncidentLog::create([
+            'incident_id' => $incident->id,
+            'unit_id' => $user->unit_id,
+            'user_id' => $user->id,
+            'type' => IncidentLog::TYPE_UNIT,
+            'details'  => strip_tags($params['content'])
+        ]);
+        return $response;
+    }
+
     public function update($request, $response, $args)
     {
         $incident = Incident::find($args['id']);
@@ -153,7 +186,6 @@ Class IncidentController
         ) {
             return $response->withStatus(403);
         }
-        // TODO: Only edit if shift not over
 
         $params = $request->getParsedBody();
         try {

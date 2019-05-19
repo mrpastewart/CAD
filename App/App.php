@@ -111,6 +111,8 @@ Class App
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 
             // Incidents
+            $self->app->post('/api/incidents/{id}/notes', '\App\Controllers\IncidentController:addNote');
+
             $self->app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
             $self->app->post('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:assignUnit');
             $self->app->delete('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:unassignUnit');

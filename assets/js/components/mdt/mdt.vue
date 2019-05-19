@@ -69,14 +69,6 @@
                     </div>
                     <div class="p-2">
                         <div class="form-group">
-                            <label></label>
-                            <select type="text" class="form-control" v-model="editFields.grading" >
-                                <option value="I">India</option>
-                                <option value="S">Siera</option>
-                                <option value="D">Delayed</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Content</label>
                             <textarea class="form-control" v-model="updateText" rows="3"></textarea>
                         </div>
@@ -126,7 +118,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center flex-wrap flex-fill">
-                    <p class='m-1 text-center' v-if='incident === null'>
+                    <p class='m-1 text-center' v-if='incident === null && unit.status != 0'>
                         No current assignment
                     </p>
                     <button type="button" class="m-1 btn btn-primary" v-if='unit.status === 5' @click='updateStatus(6)'>
@@ -226,7 +218,14 @@ export default {
             this.show_comments = !this.show_comments
         },
         submitUpdate: function () {
-
+            let self = this;
+            axios.post('/api/incidents/'+this.incident.id+'/notes', {
+                'content': this.updateText
+            }).then(function() {
+                self.changePage('main');
+                self.refresh();
+                self.updateText = '';
+            });
         }
     },
     computed: {
