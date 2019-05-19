@@ -77,17 +77,7 @@ Class IncidentController
             return $response->withJson(['error' => 'Unit not found'], 404);
         }
 
-        $this->container->get('db')
-                        ->table('incident_unit')
-                        ->where('unit_id', $unit->id)
-                        ->where('status', Incident::UNIT_STATUS_ASSIGNED)
-                        ->update(['status' => Incident::UNIT_STATUS_UNASSIGNED]);
-
-        $incident->units()->attach($unit->id, ['status' => Incident::UNIT_STATUS_ASSIGNED, 'assigned_at' => date('Y-m-d H:i:s')]);
-        $unit->status = Unit::STATUS_ON_ROUTE;
-        $unit->incident_id = $incident->id;
-        $unit->save();
-
+        $incident->assignUnit($unit);
         IncidentLog::assignUnitToIncident($incident, $unit);
     }
 
@@ -107,16 +97,7 @@ Class IncidentController
             return $response->withJson(['error' => 'Unit not found'], 404);
         }
 
-        $this->container->get('db')
-                        ->table('incident_unit')
-                        ->where('unit_id', $unit->id)
-                        ->where('status', Incident::UNIT_STATUS_ASSIGNED)
-                        ->update(['status' => Incident::UNIT_STATUS_UNASSIGNED, 'unassigned_at' => date('Y-m-d H:i:s')]);
-
-        $unit->status = Unit::STATUS_AVAILABLE_PATROL;
-        $unit->incident_id = null;
-        $unit->save();
-
+        $incident->unassignUnit($unit);
         IncidentLog::unassignUnitFromIncident($incident, $unit);
     }
 
@@ -126,10 +107,10 @@ Class IncidentController
         // it's serving as the default refreshable information hub
 
         $incidents = Incident::where('shift_id', $args['shift_id'])
-                               ->where(function ($query) {
-                                   $query->where('status', '=', Incident::STATUS_DRAFT)
-                                          ->orWhere('status', '=', Incident::STATUS_ACTIVE);
-                               })
+                               // ->where(function ($query) {
+                               //     $query->where('status', '=', Incident::STATUS_DRAFT)
+                               //            ->orWhere('status', '=', Incident::STATUS_ACTIVE);
+                               // })
                                ->with(['units', 'logs'])
                                ->get();
 
@@ -153,7 +134,7 @@ Class IncidentController
         }
 
         $user = User::where('session_id', $_SESSION['user_ref'])->first();
-        if ($user === NULL || $user->session_id !== $_SESSION['user_ref']) {
+        if ($user === null || $user->session_id !== $_SESSION['user_ref']) {
             return $response->withStatus(401);
         }
 
@@ -170,6 +151,10 @@ Class IncidentController
             'type' => IncidentLog::TYPE_UNIT,
             'details'  => strip_tags($params['content'])
         ]);
+
+        if (isset($params['close']) && $params['close'] == true) {
+            $incident->close();
+        }
         return $response;
     }
 

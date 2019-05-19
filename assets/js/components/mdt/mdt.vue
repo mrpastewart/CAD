@@ -68,14 +68,24 @@
                         <p style="white-space: pre-wrap;">{{incident.details}}</p>
                     </div>
                     <div class="p-2">
-                        <div class="form-group">
-                            <label>Content</label>
-                            <textarea class="form-control" v-model="updateText" rows="3"></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="m-1 btn btn-success" @click='submitUpdate'>
-                                Submit update
+                        <div class="d-flex justify-content-center flex-wrap flex-fill" v-if="updateOption == null">
+                            <button type="button" class="m-1 btn btn-success" @click='updateOption = "note"'>
+                                Add note
                             </button>
+                            <button type="button" class="m-1 btn btn-primary" @click='updateOption = "close"'>
+                                Close incident
+                            </button>
+                        </div>
+                        <div v-if="updateOption == 'note' || updateOption == 'close'">
+                            <div class="form-group">
+                                <label>Content</label>
+                                <textarea class="form-control" v-model="updateText" rows="3"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="m-1 btn btn-success" @click='submitUpdate'>
+                                    Submit update
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +115,7 @@
                                         <div class="chat-message-author" v-if='log.type == 2'>
                                             <span class="badge badge-pill badge-primary">{{log.type}}</span>
                                         </div>
-                                        <div class="chat-message__message">
+                                        <div class="chat-message__message pre-wrap">
                                             {{log.details}}
                                         </div>
                                         <div class="chat-message__time">
@@ -155,7 +165,8 @@ export default {
             stateZeroUnits: null,
             page: 'main',
             show_comments: false,
-            updateText: ''
+            updateText: '',
+            updateOption: null
         }
     },
     mounted() {
@@ -213,6 +224,7 @@ export default {
         },
         changePage: function(page) {
             this.page = page
+            this.updateOption = null;
         },
         toggleComments: function() {
             this.show_comments = !this.show_comments
@@ -220,7 +232,8 @@ export default {
         submitUpdate: function () {
             let self = this;
             axios.post('/api/incidents/'+this.incident.id+'/notes', {
-                'content': this.updateText
+                'content': this.updateText,
+                'close' : (this.updateOption == 'close')
             }).then(function() {
                 self.changePage('main');
                 self.refresh();

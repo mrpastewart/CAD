@@ -31,7 +31,7 @@
                         <p>Location:{{incident.location1}}&nbsp;,{{incident.location2}}</p>
                         <p>Type:{{incident.type}}</p>
                         <br />
-                        <p style="white-space: pre-wrap;">{{incident.details}}</p>
+                        <p class='pre-wrap'>{{incident.details}}</p>
                     </div>
                     <div v-if="editing">
                         <div class="form-group">
@@ -84,7 +84,7 @@
                             <div class="chat-message-author" v-if='log.type == 2'>
                                 <span class="badge badge-pill badge-primary">{{log.type}}</span>
                             </div>
-                            <div class="chat-message__message">
+                            <div class="chat-message__message pre-wrap">
                                 {{log.details}}
                             </div>
                             <div class="chat-message__time">
