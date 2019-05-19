@@ -55,12 +55,12 @@ export default {
             if (this.type == 'incident-available') {
                 // assign unit to incident
                 axios.post('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
-                    this.$store.dispatch('refresh');
+                    self.$store.dispatch('updateDispatcher');
                 });
             } else if (this.type == 'incident-assigned') {
                 // unassign unit to incident
                 axios.delete('/api/incidents/'+this.incidentId+'/units/'+this.unit.id).then(function() {
-                    this.$store.dispatch('refresh');
+                    self.$store.dispatch('updateDispatcher');
                 });
             }
 

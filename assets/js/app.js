@@ -14,9 +14,10 @@ import DispatcherIncident from './components/dispatcher/incident.vue'
 import DispatcherIncidentUnits from './components/dispatcher/incident-units.vue'
 import DispatcherUnitBadge from './components/dispatcher/unit-badge.vue'
 import LoginForm from './components/login-form.vue'
+import Notifications from './components/notifications.vue'
 
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 Vue.component('mdt', Mdt);
 Vue.component('mdt-cad', MdtCad);
 Vue.component('dispatcher', Dispatcher);
@@ -26,6 +27,7 @@ Vue.component('dispatcher-incident', DispatcherIncident);
 Vue.component('dispatcher-incident-units', DispatcherIncidentUnits);
 Vue.component('dispatcher-unit-badge', DispatcherUnitBadge);
 Vue.component('login-form', LoginForm);
+Vue.component('notifications', Notifications);
 
 const store = new Vuex.Store({
     state: {
@@ -62,7 +64,7 @@ const store = new Vuex.Store({
             context.commit('SET_SHIFT_ID', params.id)
         },
         setIncident(context, params) {
-            context.commit('SET_INCIDENT', context.state.incidents.find(function (incident) {
+            context.commit('SET_INCIDENT', context.state.incidents.find(function(incident) {
                 return incident.id === params.id;
             }));
         },
@@ -72,42 +74,44 @@ const store = new Vuex.Store({
         getDivisions(context) {
             return new Promise((resolve, reject) => {
                 axios.get('/api/divisions')
-                .then((response) => {
-                    if (response.status == 200) {
-                        context.commit('SET_DIVISIONS', response.data)
-                        resolve(response);
-                    };
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        window.location.href = '/';
-                    }
-                    reject(error);
-                });
+                    .then((response) => {
+                        if (response.status == 200) {
+                            context.commit('SET_DIVISIONS', response.data)
+                            resolve(response);
+                        };
+                    }).catch((error) => {
+                        if (error.response.status == 401) {
+                            window.location.href = '/';
+                        }
+                        reject(error);
+                    });
             });
         },
         updateDispatcher(context) {
             return new Promise((resolve, reject) => {
                 context.commit('SET_LOADING', true);
-                axios.get('/api/shifts/'+context.state.shiftId+'/incidents')
-                .then((response) => {
-                    if (response.status == 200) {
-                        context.commit('SET_INCIDENTS', response.data.incidents);
-                        context.commit('SET_UNITS', response.data.units);
+                axios.get('/api/shifts/' + context.state.shiftId + '/incidents')
+                    .then((response) => {
+                        if (response.status == 200) {
+                            context.commit('SET_INCIDENTS', response.data.incidents);
+                            context.commit('SET_UNITS', response.data.units);
 
-                        if (context.state.incident) {
-                            // Manually update the incident rendered as doesn't auto update
-                            context.dispatch('setIncident',{id:context.state.incident.id});
+                            if (context.state.incident) {
+                                // Manually update the incident rendered as doesn't auto update
+                                context.dispatch('setIncident', {
+                                    id: context.state.incident.id
+                                });
+                            }
+                            context.commit('SET_LOADING', false);
+                            resolve(response);
                         }
-                        context.commit('SET_LOADING', false);
-                        resolve(response);
-                    }
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        context.commit('SET_LOADING', false);
-                        window.location.href = '/';
-                    }
-                    reject(error);
-                });
+                    }).catch((error) => {
+                        if (error.response.status == 401) {
+                            context.commit('SET_LOADING', false);
+                            window.location.href = '/';
+                        }
+                        reject(error);
+                    });
             });
         }
     },

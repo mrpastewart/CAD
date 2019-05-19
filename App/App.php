@@ -115,6 +115,7 @@ Class App
 
             // Incidents
             $self->app->post('/api/incidents/{id}/notes', '\App\Controllers\IncidentController:addNote');
+            $self->app->post('/api/incidents/{id}/reopen', '\App\Controllers\IncidentController:reopen');
 
             $self->app->patch('/api/incidents/{id}', '\App\Controllers\IncidentController:update');
             $self->app->post('/api/incidents/{id}/units/{unit_id}', '\App\Controllers\IncidentController:assignUnit');
@@ -187,7 +188,7 @@ Class App
     static function regenerateSession()
     {
         // If this session is obsolete it means there already is a new id
-        if (isset($_SESSION['OBSOLETE']) || $_SESSION['OBSOLETE'] == true) {
+        if (isset($_SESSION['OBSOLETE'])) {
             return;
         }
 

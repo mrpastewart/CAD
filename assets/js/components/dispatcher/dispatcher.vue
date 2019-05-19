@@ -26,16 +26,15 @@
                 </div>
                 <div class="row">
                     <div v-if="!incident" class="dispatcher-panel__container col-lg-3 col-sm-6">
-                        <div class="dispatcher-panel__title"
-                        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == null) }"
-                        v-on:click="setDivisionFilter(null)">
-                            All
-                        </div>
-                        <div class="dispatcher-panel__title"
-                        v-for="division in divisions"
-                        v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == division.id) }"
-                        v-on:click="setDivisionFilter(division.id)">
-                            {{division.shorthand_name}}
+                        <div>
+                            <div class="dispatcher-panel__title"
+                            v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == null) }"
+                            v-on:click="setDivisionFilter(null)">All</div><div class="dispatcher-panel__title"
+                            v-for="division in divisions"
+                            v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == division.id) }"
+                            v-on:click="setDivisionFilter(division.id)">
+                                {{division.shorthand_name}}
+                            </div>
                         </div>
                         <div class="dispatcher-panel__block">
                             <div class="text-center text-bold" v-if="availableUnits.length == 0">
@@ -58,15 +57,21 @@
                     v-bind:units="units"
                     v-bind:incident.sync="incident"/>
                     <div class="dispatcher-panel__container col-lg-9 col-sm-6" v-if="!incident">
-                        <div class="dispatcher-panel__title dispatcher-panel__title--selected">
-                            Incident list
+                        <div class="dispatcher-panel__title"
+                        v-bind:class="{ 'dispatcher-panel__title--selected': (incidentFilter == null) }"
+                        v-on:click="setIncidentFilter(null)">
+                            Active incidents
+                        </div><div class="dispatcher-panel__title"
+                        v-bind:class="{ 'dispatcher-panel__title--selected': (incidentFilter == 'closed') }"
+                        v-on:click="setIncidentFilter('closed')">
+                            Closed incidents
                         </div>
-                        <div class="dispatcher-panel__block dispatcher-panel__block--secondary" v-if="incidents.length == 0">
+                        <div class="dispatcher-panel__block dispatcher-panel__block--secondary" v-if="selectedIncidents.length == 0">
                             <div class="text-center text-bold">
                                 <h5>No active incidents</h5>
                             </div>
                         </div>
-                        <dispatcher-incident-row v-bind:incident="incident" v-for="incident in incidents" />
+                        <dispatcher-incident-row v-bind:incident="incident" v-for="incident in selectedIncidents" />
                     </div>
                 </div>
             </div>
@@ -77,8 +82,6 @@
 <script>
 import {
     mapState
-} from 'vuex'
-import {
     mapGetters
 } from 'vuex'
 
@@ -88,10 +91,22 @@ export default {
         return {
             timer: null,
             lastUpdated: null,
-            divisionFilter: null
+            divisionFilter: null,
+            incidentFilter: null
         }
     },
     computed: {
+        selectedIncidents: function() {
+            if (this.incidentFilter == null) {
+                return this.incidents.filter(function(incident) {
+                    return incident.status === 3 || incident.status === 2;
+                })
+            } else if (this.incidentFilter == 'closed') {
+                return this.incidents.filter(function(incident) {
+                    return incident.status === 4;
+                })
+            }
+        },
         availableUnits: function() {
             return this.units.filter(function(unit) {
                 return unit.incident_id === null;
@@ -142,6 +157,13 @@ export default {
                         });
                     });
                 });
+        },
+        setIncidentFilter: function(ref) {
+            if (ref) {
+                this.incidentFilter = ref;
+            } else {
+                this.incidentFilter = null;
+            }
         },
         setDivisionFilter: function(id) {
             if (id) {

@@ -11,7 +11,11 @@
                             <i class="fas fa-angle-double-left"></i>
                             Back
                         </div>
-                        <div class="ml-auto btn btn-small btn-primary btn-sm"  @click="edit" v-if="!editing">
+                        <div class="ml-auto btn btn-small btn-success btn-sm"  @click="reopen" v-if="!editing && (incident.status == 4 || incident.status == 5)">
+                            <i class="fas fa-edit"></i>
+                            Reopen
+                        </div>
+                        <div class="ml-auto btn btn-small btn-primary btn-sm"  @click="edit" v-if="!editing && (incident.status != 4 && incident.status != 5)">
                             <i class="fas fa-edit"></i>
                             Edit
                         </div>
@@ -140,12 +144,19 @@ export default {
                 "location1": this.editFields.location1,
                 "location2": this.editFields.location2
             }).then(function() {
-                this.$store.dispatch('refresh');
+                self.$store.dispatch('updateDispatcher');
+            });
+        },
+        reopen() {
+            this.editing = false;
+            let self = this;
+            axios.post('/api/incidents/'+this.incident.id+'/reopen').then(function() {
+                self.$store.dispatch('updateDispatcher');
             });
         },
         deleteIncident() {
             axios.delete('/api/incidents/'+this.incident.id);
-            this.close();
+            // this.close();
         }
     }
 }

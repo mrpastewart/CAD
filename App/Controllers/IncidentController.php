@@ -68,8 +68,13 @@ Class IncidentController
             return $response->withJson(['error' => 'Incident not found'], 404);
         }
 
-        if ($incident->status !== Incident::STATUS_ACTIVE ) {
+        if ($incident->status !== Incident::STATUS_ACTIVE && $incident->status !== Incident::STATUS_CREATED) {
             return $response->withJson(['error' => 'Incident is not active'], 400);
+        }
+
+        if ($incident->status === Incident::STATUS_CREATED) {
+            $incident->status = Incident::STATUS_ACTIVE;
+            $incident->save();
         }
 
         $unit = Unit::find($args['unit_id']);
@@ -155,6 +160,24 @@ Class IncidentController
         if (isset($params['close']) && $params['close'] == true) {
             $incident->close();
         }
+        return $response;
+    }
+
+    public function reopen($request, $response, $args)
+    {
+        $incident = Incident::find($args['id']);
+        if (!$incident) {
+            return $response->withStatus(404);
+        }
+
+        if (
+            $incident->status !== Incident::STATUS_COMPLETED
+            && $incident->status !== Incident::STATUS_REJECTED
+        ) {
+            return $response->withStatus(403);
+        }
+        $incident->status = Incident::STATUS_CREATED;
+        $incident->save();
         return $response;
     }
 
