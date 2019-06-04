@@ -27,9 +27,10 @@ const routes = [
         component: Mdt
     },
     {
-        path: '/dispatcher',
+        path: '/dispatcher/:shiftId',
         name: 'dispatcher',
-        component: Dispatcher
+        component: Dispatcher,
+        props: true
     }
 ];
 

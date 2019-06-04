@@ -103,7 +103,12 @@
 </template>
 
 <script>
+import DispatcherIncidentUnits from './incident-units.vue';
+
 export default {
+    components: {
+        DispatcherIncidentUnits
+    },
     props: ['incident', 'units'],
     data: function () {
         let logs = [];

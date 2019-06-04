@@ -84,6 +84,10 @@ import {
     mapState,
     mapGetters
 } from 'vuex'
+import DispatcherUnitBadge from './unit-badge.vue';
+import DispatcherIncidentRow from './incident-row.vue';
+import DispatcherIncident from './incident.vue';
+import DispatcherIncidentUnits from './incident-units.vue';
 
 export default {
     props: ['shiftId'],
@@ -94,6 +98,12 @@ export default {
             divisionFilter: null,
             incidentFilter: null
         }
+    },
+    components: {
+        DispatcherUnitBadge,
+        DispatcherIncidentUnits,
+        DispatcherIncidentRow,
+        DispatcherIncident
     },
     computed: {
         selectedIncidents: function() {
