@@ -276,6 +276,7 @@ h1, h2, h3, h4, h5, h6, p {
     border: 1px solid #384359;
     margin: 10px;
     position: relative;
+    background-color: #4f5b6d;
     -webkit-animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
     animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
 }
@@ -302,6 +303,7 @@ h1, h2, h3, h4, h5, h6, p {
 .notification-list {
     position: absolute;
     right: 0px;
+    z-index:10;
     top: 0px;
 }
 

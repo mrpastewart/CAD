@@ -155,8 +155,10 @@ export default {
             });
         },
         deleteIncident() {
-            axios.delete('/api/incidents/'+this.incident.id);
-            // this.close();
+            axios.delete('/api/incidents/'+this.incident.id).then(() => {
+                this.$store.dispatch('updateDispatcher');
+                this.close();
+            });
         }
     }
 }

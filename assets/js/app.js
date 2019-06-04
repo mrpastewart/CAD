@@ -37,7 +37,8 @@ const store = new Vuex.Store({
         timer: null,
         loading: false,
         shiftId: false,
-        divisions: []
+        divisions: [],
+        notifications: []
     },
     mutations: {
         SET_LOADING(state, status) {
@@ -57,9 +58,24 @@ const store = new Vuex.Store({
         },
         SET_DIVISIONS(state, divisions) {
             state.divisions = divisions;
+        },
+        ADD_NOTIFICATION(state, notification) {
+          state.notifications.push(notification);
+        },
+        DELETE_NOTIFICATION(state, notificationId) {
+          state.notifications.splice(notificationId,1);
         }
     },
     actions: {
+        addNotification(context, params) {
+          context.commit("ADD_NOTIFICATION", {
+            'type': (params['type'] ? params['type'] : 'error'),
+            'text': (params['text'] ? params['text'] : 'error')
+          });
+        },
+        deleteNotification(context, id) {
+          context.commit('DELETE_NOTIFICATION', id)
+        },
         setShiftId(context, params) {
             context.commit('SET_SHIFT_ID', params.id)
         },
@@ -78,7 +94,7 @@ const store = new Vuex.Store({
                         if (response.status == 200) {
                             context.commit('SET_DIVISIONS', response.data)
                             resolve(response);
-                        };
+                        }
                     }).catch((error) => {
                         if (error.response.status == 401) {
                             window.location.href = '/';

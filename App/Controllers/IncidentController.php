@@ -112,10 +112,6 @@ Class IncidentController
         // it's serving as the default refreshable information hub
 
         $incidents = Incident::where('shift_id', $args['shift_id'])
-                               // ->where(function ($query) {
-                               //     $query->where('status', '=', Incident::STATUS_DRAFT)
-                               //            ->orWhere('status', '=', Incident::STATUS_ACTIVE);
-                               // })
                                ->with(['units', 'logs'])
                                ->get();
 

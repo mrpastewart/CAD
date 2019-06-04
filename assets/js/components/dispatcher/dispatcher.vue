@@ -81,7 +81,7 @@
 
 <script>
 import {
-    mapState
+    mapState,
     mapGetters
 } from 'vuex'
 
@@ -152,6 +152,7 @@ export default {
                 })
                 .then((response) => {
                     this.refresh().then(() => {
+                        this.$store.dispatch('addNotification', {type:'information',text:'Created incident #'+response.data.id});
                         this.$store.dispatch('setIncident', {
                             'id': response.data.id
                         });
