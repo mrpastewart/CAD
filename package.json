@@ -13,10 +13,11 @@
         "webpack": "^4.29.6"
     },
     "devDependencies": {
-        "babel-loader": "^8.0.5",
-        "webpack-cli": "^3.3.0",
         "@babel/core": "^7.4.4",
         "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-        "@babel/preset-env": "^7.4.4"
+        "@babel/preset-env": "^7.4.4",
+        "babel-loader": "^8.0.5",
+        "vue-router": "^3.0.6",
+        "webpack-cli": "^3.3.0"
     }
 }

@@ -303,7 +303,7 @@ h1, h2, h3, h4, h5, h6, p {
 .notification-list {
     position: absolute;
     right: 0px;
-    z-index:10;
+    z-index: 10;
     top: 0px;
 }
 
@@ -350,4 +350,105 @@ h1, h2, h3, h4, h5, h6, p {
         transform-origin: top;
         opacity: 1;
     }
+}
+
+html, body {
+    height: 100%;
+    color: #efefef;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-container {
+    display: flex;
+    background: #4f5b6d;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.flex-container .login-main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-container .login-main-content .login-form {
+    box-sizing: border-box;
+    padding: 10px 30px;
+    background-color: #384359;
+    border-radius: 2px;
+    min-height: 100px;
+    max-width: 500px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: 20px auto;
+}
+
+.spinner::before {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: block;
+    content: '';
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-left: 1px solid #ccc;
+    border-bottom: none;
+    animation-name: spinner--spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    position: relative;
+}
+
+.spinner::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    width: 40px;
+    height: 40px;
+    top: 5px;
+    left: 5px;
+    position: absolute;
+    animation-name: spinner--spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
+}
+
+@keyframes spinner--spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.footer {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+    background-color: #efefef;
+    margin-top: 50px;
+}
+
+.system-alert {
+    margin: 10px;
+    background-color: #ff1227;
 }

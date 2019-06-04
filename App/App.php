@@ -102,6 +102,7 @@ Class App
         $self = $this; // To bypass being unable to pass $this into callback
 
         $this->app->get('/', '\App\Controllers\IndexController:index');
+        $this->app->get('/api/user', '\App\Controllers\UserController:view');
         $self->app->post('/auth/login', '\App\Controllers\UserController:login');
         $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
 
