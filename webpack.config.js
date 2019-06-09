@@ -17,6 +17,14 @@ module.exports = {
         {
             test: /\.js?$/,
             loader: 'babel-loader'
+        },
+        {
+            test: /\.scss$/,
+            use: [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader'
+            ]
         }]
     },
     resolve: {
@@ -25,7 +33,6 @@ module.exports = {
         }
     },
     plugins: [
-        // make sure to include the plugin for the magic
         new VueLoaderPlugin()
     ]
 }

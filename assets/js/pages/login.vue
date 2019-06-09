@@ -67,12 +67,15 @@ export default {
             });
         },
         checkUser() {
-            let self = this;
+            var self = this;
             this.$store.dispatch('getUser').finally( () => {
-                self.loaded = true;
-
                 if (self.user) {
-                    self.$router.push({name:'home'})
+                    self.$store.dispatch('getShifts').finally( () => {
+                        self.$router.push({name:'home'})
+                        self.loaded = true;
+                    });
+                } else {
+                    self.loaded = true;
                 }
             });
         }

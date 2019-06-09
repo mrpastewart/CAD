@@ -46,15 +46,15 @@ Class UserController
         if (
             !isset($params['passenger'])
             || !is_bool($params['passenger'])
-            || empty($params['name'])
             || empty($params['shift'])
         ) {
             return $response->withJson(['error' => 'You must fill in all the boxes'], 400);
         }
 
-        $user = User::firstOrNew([
-            'name' => trim($params['name'])
-        ]);
+        $user = User::where('session_id', $_SESSION['user_ref'] ?? null)->first();
+        if (!$user) {
+            return $response->withJson(false,401);
+        }
 
         // get shift
         $shift = Shift::where('id', trim($params['shift']))

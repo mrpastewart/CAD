@@ -13,6 +13,7 @@ const store = new Vuex.Store({
         shiftId: false,
         divisions: [],
         notifications: [],
+        shifts: [],
         user: null,
         offline: false
     },
@@ -25,6 +26,9 @@ const store = new Vuex.Store({
         },
         SET_INCIDENT(state, incident) {
             state.incident = incident;
+        },
+        SET_SHIFTS(state, shifts) {
+            state.shifts = shifts;
         },
         SET_UNITS(state, units) {
             state.units = units;
@@ -78,6 +82,22 @@ const store = new Vuex.Store({
                             resolve(response);
                         }
                     }).catch((error) => {
+                        reject(error);
+                    });
+            });
+        },
+        getShifts(context) {
+            return new Promise((resolve, reject) => {
+                axios.get('/api/shifts')
+                    .then((response) => {
+                        if (response.status == 200) {
+                            context.commit('SET_SHIFTS', response.data)
+                            resolve(response);
+                        }
+                    }).catch((error) => {
+                        if (error.response.status == 401) {
+                            window.location.href = '/';
+                        }
                         reject(error);
                     });
             });
