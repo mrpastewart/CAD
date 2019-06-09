@@ -60,6 +60,15 @@ Class UnitController
         } elseif ($unit->status === 6 && $oldUnit->status === 5) {
             IncidentLog::markUnitOnScene($unit);
         }
+
+        if ($unit->status == 11) {
+            // Book both users off as unit is disbanded
+            foreach ($unit->users as $user) {
+                $user->unit_id = Null;
+                $user->save();
+            }
+        }
+        
         return $response;
     }
 }

@@ -24,7 +24,10 @@ Class IncidentController
     {
         $incident = Incident::where('shift_id', $args['shift_id'])
                               ->where('id', $args['id'])
-                              ->with(['units', 'logs'])->get();
+                              ->with('logs')
+                              ->with(['units' => function($q) {
+                                  $q->wherePivot('status', '<>', Incident::UNIT_STATUS_UNASSIGNED);
+                              }])->get();
         return $response->withJson($incident);
     }
 
@@ -112,7 +115,10 @@ Class IncidentController
         // it's serving as the default refreshable information hub
 
         $incidents = Incident::where('shift_id', $args['shift_id'])
-                               ->with(['units', 'logs'])
+                               ->with('logs')
+                               ->with(['units' => function($q) {
+                                   $q->wherePivot('status', '<>', Incident::UNIT_STATUS_UNASSIGNED);
+                               }])
                                ->get();
 
         $units = Unit::where('shift_id', $args['shift_id'])->get();
@@ -201,11 +207,5 @@ Class IncidentController
         }
 
         return $response;
-    }
-
-    public function unitIndex($request, $response, $args)
-    {
-        $units = Unit::where('shift_id', $args['shift_id'])->get();
-        return $response->withJson($units);
     }
 }

@@ -8,9 +8,11 @@
         </div>
         <div class='dispatch-container__container'>
             <div class="menu">
-                <div class="menu__item menu__item--active">
-                    <i class="fas fa-home"></i>
-                </div>
+                <router-link to="/home">
+                    <div class="menu__item">
+                        <i class="fas fa-home"></i>
+                    </div>
+                </router-link>
                 <div class="menu__item">
                     <i class="fas fa-user"></i>
                 </div>
@@ -41,7 +43,11 @@ export default {
     computed: mapState({
         user: 'user',
         offline: 'offline',
-    })
+    }),
+    mounted: function()
+    {
+        this.$store.dispatch('getUser');
+    }
 }
 </script>
 
@@ -83,7 +89,6 @@ div {
 }
 
 .dispatch-container {
-    margin: 10px;
     background-color: #384359;
     &__container {
         display: flex;
@@ -142,7 +147,7 @@ div {
             border-bottom: none;
             border-right: 1px solid #253031;
         }
-        &--active,
+        .router-link-active > &,
         &:hover {
             color: #2978a0;
             cursor: pointer;

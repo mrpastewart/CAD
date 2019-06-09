@@ -38,8 +38,16 @@ h1, h2, h3, h4, h5, h6, p {
 
 .dispatcher-panel__container {
     margin-top: 5px;
+    margin-right:0px;
+    margin-left:0px;
 }
-
+.dispatcher-panel__container:first-child{
+    padding-left:0px;
+    padding-right:0px;
+}
+.dispatcher-panel__container:last-child{
+    padding-right:0px;
+}
 .dispatcher-panel__title.dispatcher-panel__title--selected,
 .dispatcher-panel__title:hover {
     opacity: 1;
@@ -47,7 +55,7 @@ h1, h2, h3, h4, h5, h6, p {
 
 .dispatcher-panel__title {
     padding: 0px 5px 1px 5px;
-    background-color: #384359;
+    background-color: #4f5b6d;
     width: auto;
     display: inline-block;
     border-top-left-radius: 5px;
@@ -59,22 +67,18 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .dispatcher-panel__block {
-    background-color: #384359;
+    background-color: #4f5b6d;
     padding: 10px;
     min-height: 100px;
 }
 
 .dispatcher-panel__block .dispatcher-panel__block--secondary {
-    background-color: #4f5b6d;
-}
-
-.dispatcher-container {
-    padding: 10px 5px 0 5px;
+    background-color: #384359;
 }
 
 .unit-badge {
     position: relative;
-    background-color: #4f5b6d;
+    background-color: #384359;
     height: 50px;
     margin: 5px 0px;
     border-radius: 5px;
@@ -112,6 +116,7 @@ h1, h2, h3, h4, h5, h6, p {
 .unit-badge__arrow-left {
     top: calc(50% - 15px);
     position: relative;
+    cursor: pointer;
     height: calc(100% - 10px);
     font-size: 20px;
     width: 30px;

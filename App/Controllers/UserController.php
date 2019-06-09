@@ -47,6 +47,7 @@ Class UserController
             !isset($params['passenger'])
             || !is_bool($params['passenger'])
             || empty($params['shift'])
+            || empty($params['callsign'])
         ) {
             return $response->withJson(['error' => 'You must fill in all the boxes'], 400);
         }

@@ -112,8 +112,8 @@ Class App
             // Shifts
             $self->app->get('/api/mdt', '\App\Controllers\MdtController:index');
 
+            $self->app->get('/api/shifts/{shift_id}/units', '\App\Controllers\ShiftController:unitIndex');
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
-            $self->app->get('/api/shifts/{shift_id}/units', '\App\Controllers\IncidentController:unitIndex');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 
             // Incidents

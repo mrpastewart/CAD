@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use Psr\Container\ContainerInterface;
 use App\Models\Shift;
+use App\Models\Unit;
 
 Class ShiftController
 {
@@ -31,5 +32,13 @@ Class ShiftController
             unset($shifts[$key]['incidents']);
         }
         return $response->withJson($shifts);
+    }
+
+    public function unitIndex($request, $response, $args)
+    {
+        $units = Unit::where('shift_id', $args['shift_id'])
+                     ->where('status', '<>', 11)
+                     ->get();
+        return $response->withJson($units);
     }
 }

@@ -3,7 +3,6 @@ namespace App\Controllers;
 
 use Psr\Container\ContainerInterface;
 use App\Models\Incident;
-use App\Models\IncidentLog;
 use App\Models\Unit;
 use App\Models\User;
 
@@ -24,6 +23,11 @@ Class MdtController
     {
         $user = User::where('session_id', $_SESSION['user_ref'])->first();
         $unit = Unit::find($user->unit_id);
+
+        if ($unit == null) {
+            // User is not booked with a unit anymore
+            return $response->withJson([], 403);
+        }
 
         $incident = null;
         if ($unit->incident_id !== null) {
