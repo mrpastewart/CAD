@@ -36,7 +36,7 @@
                             <label>Callsign</label>
                             <select type="text" class="form-control" v-model="passengerCallsign">
                                 <option value="" selected disabled>Select a callsign</option>
-                                <option>CN20</option>
+                                <option v-for="unit in units">{{unit.name}}</option>
                             </select>
                             <small class="form-text">The person you are accompanying must have already signed up for you to see the callsign in the list.</small>
                         </div>
@@ -85,10 +85,24 @@ export default {
             callsign: "",
             passengerCallsign: "",
             error: false,
-            unitSignup: false
+            unitSignup: false,
+            units: []
         };
     },
+    mounted: function() {
+        this.getUnits();
+    },
     methods: {
+        getUnits() {
+            this.error = false;
+            axios.get('/api/shifts/'+this.shiftId+'/units').catch((error) => {
+                if (error.response.data.error) {
+                    this.error = error.response.data.error;
+                }
+            }).then((response) => {
+                this.units = response.data;
+            });
+        },
         login(event) {
             event.preventDefault();
             this.error = false;

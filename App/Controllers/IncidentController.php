@@ -202,4 +202,10 @@ Class IncidentController
 
         return $response;
     }
+
+    public function unitIndex($request, $response, $args)
+    {
+        $units = Unit::where('shift_id', $args['shift_id'])->get();
+        return $response->withJson($units);
+    }
 }
