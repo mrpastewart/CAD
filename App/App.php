@@ -102,7 +102,9 @@ Class App
         $self = $this; // To bypass being unable to pass $this into callback
 
         $this->app->get('/', '\App\Controllers\IndexController:index');
+        $this->app->get('/api/user', '\App\Controllers\UserController:view');
         $self->app->post('/auth/login', '\App\Controllers\UserController:login');
+        $self->app->post('/auth/signup', '\App\Controllers\UserController:signup');
         $self->app->get('/api/shifts', '\App\Controllers\ShiftController:index');
 
         $this->app->group('', function () use ($self) {
@@ -110,6 +112,7 @@ Class App
             // Shifts
             $self->app->get('/api/mdt', '\App\Controllers\MdtController:index');
 
+            $self->app->get('/api/shifts/{shift_id}/units', '\App\Controllers\ShiftController:unitIndex');
             $self->app->get('/api/shifts/{shift_id}/incidents', '\App\Controllers\IncidentController:index');
             $self->app->get('/api/shifts/{shift_id}/incidents/{id}', '\App\Controllers\IncidentController:view');
 

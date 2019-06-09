@@ -46,8 +46,11 @@
 
 <script>
 import { mapState } from 'vuex'
-
+import DispatcherUnitBadge from './unit-badge.vue';
 export default {
+    components: {
+        DispatcherUnitBadge
+    },
     props: ['incident', 'availableUnits', 'assignedUnits', 'type'],
     data: function() {
         return {

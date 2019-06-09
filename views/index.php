@@ -11,7 +11,7 @@
     </head>
     <body>
         <div id='app'>
-            <login-form />
+            <router-view></router-view>
         </div>
     </body>
     <script src="/js/main.js" charset="utf-8"></script>

@@ -16,13 +16,29 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-danger" @click='updateStatus(0)' v-if='unit.status !== 0'><i class="fas fa-bell"></i>&nbsp;Panic button&nbsp;</button>
+                    <button type="button" class="btn btn-danger" @click='updateStatus(0)' v-if='unit.status !== 0 && unit.status !== 11'><i class="fas fa-bell"></i>&nbsp;Panic button&nbsp;</button>
                 </div>
             </div>
             <div style='margin:10px;background-color:#ff1227;' class="alert" role="alert" v-if="stateZeroUnits">
                 <div class="text-center text-bold">
                     <i class="fas fa-bell state-zero-flash"></i>&nbsp;STATE ZERO&nbsp;<i class="fas fa-bell state-zero-flash"></i>
                     <h5 v-for="unit in stateZeroUnits">{{unit.name}} - {{unit.occupant_string}}</h5>
+                </div>
+            </div>
+            <div v-if='page == "state11"'>
+                <div class="text-center">
+                    <p>By going State 11 you are booking yourself off of the shift.</p>
+                    <div class="btn btn-danger m-2" @click='updateStatus(11)'>
+                        <span class='state-code__box state-code__box--2'>11</span>&nbsp;Confirm book off
+                    </div>
+                </div>
+            </div>
+            <div v-if='page == "status403"'>
+                <div class="text-center">
+                    <p>You have been booked off.</p>
+                    <div class="btn btn-success m-2" @click='$router.push({name:"home"})'>
+                        Home screen
+                    </div>
                 </div>
             </div>
             <div v-if='page == "update-status"'>
@@ -51,7 +67,7 @@
                     <div class="btn btn-light m-2" @click='updateStatus(10)'>
                         <span class='state-code__box state-code__box--10'>10</span>&nbsp;Technical issues
                     </div>
-                    <div class="btn btn-light m-2" @click='updateStatus(11)'>
+                    <div class="btn btn-light m-2" @click='changePage("state11")'>
                         <span class='state-code__box state-code__box--11'>11</span>&nbsp;Off Duty
                     </div>
                 </div>
@@ -140,7 +156,7 @@
                 </div>
             </div>
             <br>
-            <div class="d-flex justify-content-center flex-wrap" v-if="page !== 'main'">
+            <div class="d-flex justify-content-center flex-wrap" v-if="page !== 'main' && unit.status != 11">
                 <button class='square-menu__button btn btn-light' type='button' @click="changePage('main')"><i class="fas fa-home"></i></button>
             </div>
             <div class="d-flex justify-content-center flex-wrap" v-if="page === 'main'">
@@ -196,7 +212,11 @@ export default {
 
                 }).catch((error) => {
                     if (error.response.status == 401) {
-                        window.location.href = '/';
+                        this.$router.push({name:'login'})
+                    }
+                    if (error.response.status == 403) {
+                        this.cancelAutoUpdate();
+                        this.changePage("status403");
                     }
                 });
         },
@@ -206,6 +226,7 @@ export default {
         updateStatus: function (statusCode) {
             this.page = 'main';
             let self = this;
+            this.unit.status = statusCode;
             axios.patch('/api/units/'+this.unit.id, {
                 'status': statusCode
             }).then(function() {

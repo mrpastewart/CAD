@@ -3,10 +3,13 @@
         <div class="dispatcher-panel__body d-flex">
             <div class="">
                 <h4>{{incident.title}}&nbsp;<span class="badge" v-bind:class='{ "badge-danger": (indiaGrade), "badge-success": (!indiaGrade) }'>{{incident.grading}} Grade</span></h4>
-                <p>ID: {{incident.id}}</p>
+                <div>
+                    #{{incident.id}}&nbsp;&nbsp;
+                    <i class="fas fa-users"></i>&nbsp;{{incident.units.length}}&nbsp;&nbsp;
+                    <i class="fas fa-comments"></i>&nbsp;{{incident.logs.length}}
+                </div>
                 <p>Interop channel: {{incident.interop}}</p>
                 <p>Type:{{incident.type}}</p>
-                <p>{{incident.details}}</p>
             </div>
             <div class="ml-auto">
                 <div class="btn btn-primary"  @click="open">

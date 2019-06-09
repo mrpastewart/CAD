@@ -26,18 +26,36 @@ Class UserController
     public function login($request, $response, $args)
     {
         $params = $request->getParsedBody();
-        if (
-            !isset($params['passenger'])
-            || !is_bool($params['passenger'])
-            || empty($params['name'])
-            || empty($params['shift'])
-        ) {
+        if (empty($params['username']) || empty($params['password'])) {
             return $response->withJson(['error' => 'You must fill in all the boxes'], 400);
         }
 
         $user = User::firstOrNew([
-            'name' => trim($params['name'])
+            'name' => trim($params['username'])
         ]);
+        $sessionId = bin2hex(random_bytes(16));
+        $_SESSION['user_ref'] = $sessionId;
+        $_SESSION['user_id'] = $user->id;
+        $user->session_id = $sessionId;
+        $user->save();
+    }
+
+    public function signup($request, $response, $args)
+    {
+        $params = $request->getParsedBody();
+        if (
+            !isset($params['passenger'])
+            || !is_bool($params['passenger'])
+            || empty($params['shift'])
+            || empty($params['callsign'])
+        ) {
+            return $response->withJson(['error' => 'You must fill in all the boxes'], 400);
+        }
+
+        $user = User::where('session_id', $_SESSION['user_ref'] ?? null)->first();
+        if (!$user) {
+            return $response->withJson(false,401);
+        }
 
         // get shift
         $shift = Shift::where('id', trim($params['shift']))
@@ -80,5 +98,14 @@ Class UserController
         // Update unit
         $unit->occupant_string = $unit->getUpdatedOccupantString();
         $unit->save();
+    }
+
+    public function view($request, $response, $args)
+    {
+        $user = User::where('session_id', $_SESSION['user_ref'] ?? null)->first();
+        if (!$user) {
+            return $response->withJson(false,401);
+        }
+        return $response->withJson($user);
     }
 }

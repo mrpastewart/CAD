@@ -38,8 +38,16 @@ h1, h2, h3, h4, h5, h6, p {
 
 .dispatcher-panel__container {
     margin-top: 5px;
+    margin-right:0px;
+    margin-left:0px;
 }
-
+.dispatcher-panel__container:first-child{
+    padding-left:0px;
+    padding-right:0px;
+}
+.dispatcher-panel__container:last-child{
+    padding-right:0px;
+}
 .dispatcher-panel__title.dispatcher-panel__title--selected,
 .dispatcher-panel__title:hover {
     opacity: 1;
@@ -47,7 +55,7 @@ h1, h2, h3, h4, h5, h6, p {
 
 .dispatcher-panel__title {
     padding: 0px 5px 1px 5px;
-    background-color: #384359;
+    background-color: #4f5b6d;
     width: auto;
     display: inline-block;
     border-top-left-radius: 5px;
@@ -59,22 +67,18 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .dispatcher-panel__block {
-    background-color: #384359;
+    background-color: #4f5b6d;
     padding: 10px;
     min-height: 100px;
 }
 
 .dispatcher-panel__block .dispatcher-panel__block--secondary {
-    background-color: #4f5b6d;
-}
-
-.dispatcher-container {
-    padding: 10px 5px 0 5px;
+    background-color: #384359;
 }
 
 .unit-badge {
     position: relative;
-    background-color: #4f5b6d;
+    background-color: #384359;
     height: 50px;
     margin: 5px 0px;
     border-radius: 5px;
@@ -112,6 +116,7 @@ h1, h2, h3, h4, h5, h6, p {
 .unit-badge__arrow-left {
     top: calc(50% - 15px);
     position: relative;
+    cursor: pointer;
     height: calc(100% - 10px);
     font-size: 20px;
     width: 30px;
@@ -254,16 +259,25 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .bordered-container__heading {
-    position: absolute;
+    position: relative;
     top: -15px;
-    left: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
     padding: 0 10px;
+    display:inline-block;
     background: #384359;
 }
 
 .bordered-container__content {
-    padding: 20px 10px 10px 10px;
+    padding: 0px 10px 10px 10px;
     width: 100%;
+}
+
+.bordered-container--flex-width {
+    width:auto;
+    min-width:200px;
+    margin-left:10px;
+    margin-right:10px;
 }
 
 .pre-wrap {}
@@ -303,7 +317,7 @@ h1, h2, h3, h4, h5, h6, p {
 .notification-list {
     position: absolute;
     right: 0px;
-    z-index:10;
+    z-index: 10;
     top: 0px;
 }
 
@@ -350,4 +364,105 @@ h1, h2, h3, h4, h5, h6, p {
         transform-origin: top;
         opacity: 1;
     }
+}
+
+html, body {
+    height: 100%;
+    color: #efefef;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-container {
+    display: flex;
+    background: #4f5b6d;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.flex-container .login-main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-container .login-main-content .login-form {
+    box-sizing: border-box;
+    padding: 10px 30px;
+    background-color: #384359;
+    border-radius: 2px;
+    min-height: 100px;
+    max-width: 500px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: 20px auto;
+}
+
+.spinner::before {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: block;
+    content: '';
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-left: 1px solid #ccc;
+    border-bottom: none;
+    animation-name: spinner--spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    position: relative;
+}
+
+.spinner::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    width: 40px;
+    height: 40px;
+    top: 5px;
+    left: 5px;
+    position: absolute;
+    animation-name: spinner--spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
+}
+
+@keyframes spinner--spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.footer {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+    background-color: #efefef;
+    margin-top: 50px;
+}
+
+.system-alert {
+    margin: 10px;
+    background-color: #ff1227;
 }
