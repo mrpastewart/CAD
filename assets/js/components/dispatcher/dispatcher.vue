@@ -1,15 +1,7 @@
 <template lang="html">
     <auth-template>
         <div>
-            <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Dispatcher</a>
-                <button class="btn btn-outline-info my-2 my-sm-0" @click="createIncident">&plus; Create CAD</button>
-                <div class="clearfix ml-auto" v-if="loading">
-                    <div class="spinner-border text-dark" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </nav> -->
+            <button class="btn btn-outline-info my-2 my-sm-0" @click="createIncident">&plus; Create CAD</button>
             <div class="dispatcher-container" v-if="(incidents === null)">
                 <div class="loading-panel__container">
                     <div class="loading-panel__content">

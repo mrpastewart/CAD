@@ -55,11 +55,7 @@
                             <label>Department</label>
                             <select type="text" class="form-control" v-model="division">
                                 <option value="" selected disabled>Select a division</option>
-                                <option>Frontline Policing</option>
-                                <option>Crime Squad</option>
-                                <option>Traffic</option>
-                                <option>Trojan</option>
-                                <option>RMU</option>
+                                <option v-for="dloop in divisions" v-bind:value="dloop.id">{{dloop.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -74,8 +70,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     props: ['shift'],
+    computed: mapState({
+        divisions: 'divisions'
+    }),
     data: function()
     {
         return {

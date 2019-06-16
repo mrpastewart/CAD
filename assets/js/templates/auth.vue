@@ -8,9 +8,17 @@
         </div>
         <div class='dispatch-container__container'>
             <div class="menu">
+                <div class="menu__item">
+                    <div class="spinner spinner--menu" v-bind:class="{'spinner--hidden': !loading}"></div>
+                </div>
                 <router-link to="/home">
                     <div class="menu__item">
                         <i class="fas fa-home"></i>
+                    </div>
+                </router-link>
+                <router-link to="/dispatcher">
+                    <div class="menu__item">
+                        <i class="fas fa-headset"></i>
                     </div>
                 </router-link>
                 <div class="menu__item">
@@ -43,6 +51,7 @@ export default {
     computed: mapState({
         user: 'user',
         offline: 'offline',
+        loading: 'loading'
     }),
     mounted: function()
     {
@@ -120,6 +129,9 @@ div {
     padding: 0;
     margin: 10px 0;
     border-right: 1px solid #253031;
+    a {
+        color:#fff;
+    }
     @include breakpoint(sm) {
         border-right: none;
         width: 100%;
@@ -169,6 +181,25 @@ SPINNER
         align-self: center;
     }
 
+    &--menu.spinner {
+        width:20px;
+        height:20px;
+        margin:0 auto;
+        padding:0;
+        margin-bottom:10px;
+        &--hidden::before {
+            visibility:hidden;
+        }
+        &::before {
+            width:20px;
+            height:20px;
+        }
+        &::after {
+            display:none;
+            width:20px;
+            height:20px;
+        }
+    }
     &::before {
         width: 50px;
         height: 50px;
