@@ -70,6 +70,7 @@ export default {
             var self = this;
             this.$store.dispatch('getUser').finally( () => {
                 if (self.user) {
+                    self.$store.dispatch('getDivisions');
                     self.$store.dispatch('getShifts').finally( () => {
                         self.$router.push({name:'home'})
                         self.loaded = true;
