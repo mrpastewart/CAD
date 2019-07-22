@@ -48,6 +48,7 @@ Class UserController
             || !is_bool($params['passenger'])
             || empty($params['shift'])
             || empty($params['callsign'])
+            || empty($params['division'])
         ) {
             return $response->withJson(['error' => 'You must fill in all the boxes'], 400);
         }
@@ -69,6 +70,7 @@ Class UserController
         // get unit
         $unit = Unit::where('name', trim($params['callsign']))
                       ->where('shift_id', $shift->id)
+                      ->where('status', '<>', Unit::STATUS_OFF_DUTY)
                       ->first();
 
         if ($params['passenger']) {
@@ -85,6 +87,7 @@ Class UserController
             $unit->name = $params['callsign'];
             $unit->status = Unit::STATUS_UNAVAILABLE;
             $unit->shift_id = $shift->id;
+            $unit->division_id = $params['division'];
             $unit->save();
 
             $user->unit_id = $unit->id;

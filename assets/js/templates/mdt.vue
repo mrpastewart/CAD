@@ -1,37 +1,38 @@
 <template>
-    <div class="dispatch-container" v-bind:class="{'dispatch-container--small': this.$route.name == 'mdt'}" v-if="user">
-        <div class="dispatch-container__heading" v-if="(user && user.unit_id && this.$route.name != 'mdt') || offline">
-            <div class="alert alert-primary text-center" v-if="user && user.unit_id">
-                <router-link to="/mdt"><i class="fas fa-clipboard"></i>&nbsp;Open MDT for current shift</router-link>
-            </div>
+    <div class="dispatch-container dispatch-container--small" v-if="user">
+        <div class="dispatch-container__heading" v-if="offline">
             <div v-if="offline" class="alert system-alert text-center"><i class="fas fa-wifi"></i>&nbsp;Unable to establish connection </div>
         </div>
         <div class='dispatch-container__container'>
-            <div class="menu">
+            <div class="menu" v-if="this.$slots.menu">
                 <div class="menu__item">
                     <div class="spinner spinner--menu" v-bind:class="{'spinner--hidden': !loading}"></div>
                 </div>
-                <slot name="menu">
-                    <router-link to="/home">
-                        <div class="menu__item">
-                            <i class="fas fa-home"></i>
-                        </div>
-                    </router-link>
-                    <router-link to="/dispatcher">
-                        <div class="menu__item">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                    </router-link>
+                <slot name="menu"></slot>
+            </div>
+            <div class="menu" v-if="!this.$slots.menu">
+                <div class="menu__item">
+                    <div class="spinner spinner--menu" v-bind:class="{'spinner--hidden': !loading}"></div>
+                </div>
+                <router-link to="/home">
                     <div class="menu__item">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-home"></i>
                     </div>
+                </router-link>
+                <router-link to="/dispatcher">
                     <div class="menu__item">
-                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-headset"></i>
                     </div>
-                    <div class="menu__item">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </div>
-                </slot>
+                </router-link>
+                <div class="menu__item">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="menu__item">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="menu__item">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
             </div>
             <div class="dispatch-container__content">
                 <slot></slot>
@@ -102,7 +103,7 @@ div {
 .dispatch-container {
     background-color: #384359;
     &--small {
-        max-width:550px;
+        max-width:600px;
         margin:0 auto;
     }
     &__container {

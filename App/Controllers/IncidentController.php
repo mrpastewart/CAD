@@ -121,7 +121,9 @@ Class IncidentController
                                }])
                                ->get();
 
-        $units = Unit::where('shift_id', $args['shift_id'])->get();
+        $units = Unit::where('shift_id', $args['shift_id'])
+                     ->where('status', '<>' , Unit::STATUS_OFF_DUTY)
+                     ->get();
 
         return $response->withJson ([
             'incidents' => $incidents,

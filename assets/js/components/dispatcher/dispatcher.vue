@@ -1,7 +1,13 @@
 <template lang="html">
     <auth-template>
-        <div>
-            <button class="btn btn-outline-info my-2 my-sm-0" @click="createIncident">&plus; Create CAD</button>
+        <div style='width:100%;'>
+            <div class="menu menu--horizontal">
+                <div class="menu__item menu__item--small">
+                    <div class="btn btn-outline-light" @click='createIncident()'>
+                        <i class="fas fa-plus"></i>&nbsp;Create Incident
+                    </div>
+                </div>
+            </div>
             <div class="dispatcher-container" v-if="(incidents === null)">
                 <div class="loading-panel__container">
                     <div class="loading-panel__content">
@@ -77,7 +83,7 @@
 import {
     mapState,
     mapGetters
-} from 'vuex'
+} from 'vuex';
 import DispatcherUnitBadge from './unit-badge.vue';
 import DispatcherIncidentRow from './incident-row.vue';
 import DispatcherIncident from './incident.vue';
@@ -189,5 +195,9 @@ export default {
 <style lang="scss" scoped>
 .dispatch-container__content{
     background-color:rgba(79, 91, 109, 1) !important;
+}
+.dispatcher-container {
+    display: flex;
+    flex-wrap:nowrap;
 }
 </style>
