@@ -169,7 +169,7 @@ div {
     }
     &--horizontal &__item {
         border-bottom: none;
-        border-right: 1px solid #253031;
+        // border-right: 1px solid #253031;
         width: auto;
     }
     &__item {

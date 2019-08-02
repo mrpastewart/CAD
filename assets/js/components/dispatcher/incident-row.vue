@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="dispatcher-panel__block dispatcher-panel__block--secondary">
-        <div class="dispatcher-panel__body d-flex">
+        <div class="dispatcher-panel__body d-flex" @click="open">
             <div class="">
                 <h4>{{incident.title}}&nbsp;<span class="badge" v-bind:class='{ "badge-danger": (indiaGrade), "badge-success": (!indiaGrade) }'>{{incident.grading}} Grade</span></h4>
                 <div>
@@ -12,15 +12,12 @@
                 <p>Type:{{incident.type}}</p>
             </div>
             <div class="ml-auto">
-                <div class="btn btn-primary"  @click="open">
-                    View Incident
-                    <span
-                    class="badge badge-light"
-                    v-if="notificationCount"
-                    >{{notificationCount}}</span>
+                <div class="btn btn-primary" v-if="notificationCount">
+                    <span class="badge badge-light" >{{notificationCount}}</span>
                 </div>
             </div>
         </div>
+        <hr>
     </div>
 </template>
 

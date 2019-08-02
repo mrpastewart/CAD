@@ -7,10 +7,6 @@
             <div class="dispatcher-panel__block dispatcher-panel__block--secondary">
                 <div class="dispatcher-panel__body">
                     <div class='width:100%;'>
-                        <div class="btn btn-small btn-primary btn-sm"  @click="close">
-                            <i class="fas fa-angle-double-left"></i>
-                            Back
-                        </div>
                         <div class="ml-auto btn btn-small btn-success btn-sm"  @click="reopen" v-if="!editing && (incident.status == 4 || incident.status == 5)">
                             <i class="fas fa-edit"></i>
                             Reopen

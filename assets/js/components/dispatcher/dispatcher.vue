@@ -2,8 +2,13 @@
     <auth-template>
         <div style='width:100%;'>
             <div class="menu menu--horizontal">
+                <div class="menu__item menu__item--small" v-if="incident || selectedUnit">
+                    <div class="btn btn-outline-primary btn-sm" @click='closeIncident()'>
+                        <i class="fas fa-angle-double-left"></i>&nbsp;Back
+                    </div>
+                </div>
                 <div class="menu__item menu__item--small">
-                    <div class="btn btn-outline-light" @click='createIncident()'>
+                    <div class="btn btn-outline-light btn-sm" @click='createIncident()'>
                         <i class="fas fa-plus"></i>&nbsp;Create Incident
                     </div>
                 </div>
@@ -24,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div v-if="!incident" class="dispatcher-panel__container col-lg-3 col-sm-6">
+                        <div v-if="!incident && !selectedUnit" class="dispatcher-panel__container col-lg-3 col-sm-6">
                             <div>
                                 <div class="dispatcher-panel__title"
                                 v-bind:class="{ 'dispatcher-panel__title--selected': (divisionFilter == null) }"
@@ -87,6 +92,7 @@ import {
 import DispatcherUnitBadge from './unit-badge.vue';
 import DispatcherIncidentRow from './incident-row.vue';
 import DispatcherIncident from './incident.vue';
+import DispatcherUnit from './unit.vue';
 import DispatcherIncidentUnits from './incident-units.vue';
 import AuthTemplate from './../../templates/auth.vue';
 
@@ -97,7 +103,8 @@ export default {
             timer: null,
             lastUpdated: null,
             divisionFilter: null,
-            incidentFilter: null
+            incidentFilter: null,
+            selectedUnit: null
         }
     },
     components: {
@@ -105,7 +112,8 @@ export default {
         DispatcherIncidentUnits,
         DispatcherIncidentRow,
         DispatcherIncident,
-        AuthTemplate
+        AuthTemplate,
+        DispatcherUnit
     },
     computed: {
         selectedIncidents: function() {
@@ -184,6 +192,9 @@ export default {
             } else {
                 this.divisionFilter = null;
             }
+        },
+        closeIncident() {
+            this.$store.dispatch('clearIncident');
         }
     },
     beforeDestroy() {

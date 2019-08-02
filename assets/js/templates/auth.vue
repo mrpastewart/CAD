@@ -168,7 +168,8 @@ div {
     }
     &--horizontal &__item {
         border-bottom: none;
-        border-right: 1px solid #253031;
+        padding-right:0px;
+        // border-right: 1px solid #253031;
         width: auto;
     }
     &__item {
