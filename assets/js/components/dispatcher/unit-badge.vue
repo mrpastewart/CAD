@@ -1,18 +1,16 @@
 <template lang="html">
-    <div class="unit-badge d-inline-flex unit-badge--auto-width">
+    <div class="unit-badge d-inline-flex">
         <div>
             <div class="unit-badge__primary-text"><span class='state-code__box' v-bind:class="stateStyles">{{unit.status}}</span>&nbsp;{{unit.name}}</div>
             <div class="unit-badge__secondary-text">{{unit.occupant_string}}</div>
         </div>
-        <div>
+        <div class="ml-auto d-flex">
             <div class="unit-badge__role-list">
                 <img class="unit-badge__role-image" src="/img/role1/stndt.png" title='' alt="">
-                <img class="unit-badge__role-image" src="/img/role2/rmu.png" title="" alt="">
                 <div class="clear"></div>
             </div>
-        </div>
-        <div class="ml-auto">
-            <div class="unit-badge__arrow-right">
+            <div class="unit-badge__button-container">
+                <i class="fas fa-pen"></i>
                 <i class="" v-bind:class="actionStyles" @click='action'></i>
             </div>
         </div>
@@ -70,5 +68,15 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss">
+
+.unit-badge__button-container {
+  margin-left: 5px;
+  display:flex;
+  align-items:center;
+  font-size:20px;
+  & > i {
+    padding:0px 4px;
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template lang="html">
     <auth-template>
         <div style='width:100%;'>
-            <div class="menu menu--horizontal">
+<!--             <div class="menu menu--horizontal">
                 <div class="menu__item menu__item--small" v-if="incident || selectedUnit">
                     <div class="btn btn-outline-primary btn-sm" @click='closeIncident()'>
                         <i class="fas fa-angle-double-left"></i>&nbsp;Back
@@ -12,7 +12,7 @@
                         <i class="fas fa-plus"></i>&nbsp;Create Incident
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="dispatcher-container" v-if="(incidents === null)">
                 <div class="loading-panel__container">
                     <div class="loading-panel__content">
@@ -51,14 +51,9 @@
                                 />
                             </div>
                         </div>
-                        <dispatcher-incident-units
-                        v-if="incident"
-                        v-bind:incident="incident"
-                        v-bind:available-units="availableUnits"
-                        v-bind:assigned-units="assignedUnits"/>
                         <dispatcher-incident
                         v-if="incident"
-                        v-bind:units="units"
+                        v-bind:units="assignedUnits"
                         v-bind:incident.sync="incident"/>
                         <div class="dispatcher-panel__container col-lg-9 col-sm-6" v-if="!incident">
                             <div class="dispatcher-panel__title"

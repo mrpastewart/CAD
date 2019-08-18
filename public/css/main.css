@@ -81,7 +81,7 @@ h1, h2, h3, h4, h5, h6, p {
     position: relative;
     background-color: #384359;
     height: 50px;
-    margin: 5px 0px;
+    margin: 5px 2px;
     border-radius: 5px;
     padding: 5px;
     min-width: 250px;
@@ -99,11 +99,6 @@ h1, h2, h3, h4, h5, h6, p {
     font-weight: 400;
 }
 
-.unit-badge__role-list {
-    position: absolute;
-    top: 5px;
-    right: 50px;
-}
 
 .unit-badge__arrow-right {
     padding-left: 5px;
